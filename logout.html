@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LOVA — Logged Out</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a1f2e; --canvas: #f7f5f0; --surface: #ffffff;
+      --border: #e4e1db; --border-soft: #ede9e3;
+      --text: #1a1f2e; --text-2: #5a5750; --text-3: #9a9690;
+      --green: #1e7d52; --green-soft: #edf7f2; --green-border: #b8e0ce;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--canvas); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 360px; overflow: hidden; box-shadow: 0 4px 24px rgba(26,31,46,0.08); text-align: center; }
+    .card-top { padding: 36px 32px 28px; border-bottom: 1px solid var(--border-soft); }
+    .check-wrap { width: 56px; height: 56px; border-radius: 50%; background: var(--green-soft); border: 1px solid var(--green-border); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 22px; }
+    .title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .subtitle { font-size: 13px; color: var(--text-3); line-height: 1.6; font-weight: 400; }
+    .card-body { padding: 24px 32px 32px; }
+    .btn { width: 100%; height: 50px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s, transform 0.15s; }
+    .btn:active { transform: scale(0.98); }
+    .btn:hover { opacity: 0.88; }
+    .footer { padding: 0 32px 20px; font-size: 10px; font-weight: 500; color: var(--text-3); letter-spacing: 1.5px; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-top">
+      <div class="check-wrap">✓</div>
+      <div class="title">Logged out</div>
+      <div class="subtitle">Your session has been safely closed. You can close this window or return to the login page.</div>
+    </div>
+    <div class="card-body">
+      <button class="btn" onclick="returnToLogin()">Return to login</button>
+    </div>
+    <div class="footer">LOVA Hospitality Group</div>
+  </div>
+  <script>
+    sessionStorage.clear();
+    function returnToLogin() { window.location.href = "index.html"; }
+  </script>
+</body>
+</html>

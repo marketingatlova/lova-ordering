@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LOVA — Admin Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a1f2e; --navy2: #2d3447;
+      --red: #c0392b; --red-soft: #fdf0ef; --red-border: #f5c6c2;
+      --canvas: #f7f5f0; --surface: #ffffff;
+      --border: #e4e1db; --border-soft: #ede9e3;
+      --text: #1a1f2e; --text-2: #5a5750; --text-3: #9a9690;
+      --green: #1e7d52; --green-soft: #edf7f2; --green-border: #b8e0ce;
+      --amber: #925c0d; --amber-soft: #fdf5e6; --amber-border: #f5dba8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--canvas); min-height: 100vh; padding-bottom: 60px; }
+
+    .top-nav { background: var(--navy); padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .nav-left { display: flex; align-items: baseline; gap: 10px; }
+    .nav-wordmark { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .nav-tag { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; }
+    .nav-user { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.55); }
+    .btn-logout { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+    .btn-logout:active { background: rgba(255,255,255,0.14); }
+
+    .content { padding: 16px; max-width: 640px; margin: 0 auto; }
+
+    .section-label { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 1.5px; text-transform: uppercase; margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); }
+
+    .select-all-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; margin-bottom: 12px; }
+    .select-all-bar label { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; color: var(--text-2); cursor: pointer; }
+    input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--navy); cursor: pointer; }
+
+    /* ── BRANCH BLOCKS ── */
+    .branch-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(26,31,46,0.04); }
+    .branch-header { background: var(--navy); color: #fff; padding: 13px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
+    .branch-header:active { background: var(--navy2); }
+    .badge-count { font-size: 9px; font-weight: 600; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px; }
+
+    /* ── ORDER GROUP ── */
+    .order-group { margin: 10px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); overflow: hidden; }
+    .order-group-head { background: var(--canvas); padding: 11px 14px; display: flex; align-items: center; border-bottom: 1px solid var(--border); gap: 12px; }
+    .order-group-info { flex: 1; cursor: pointer; }
+    .order-group-id { font-size: 12px; font-weight: 600; color: var(--text); }
+    .order-group-meta { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .toggle-icon { font-size: 10px; color: var(--text-3); padding: 8px; cursor: pointer; }
+
+    /* ── ORDER ITEM ROW ── */
+    .admin-item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px dashed var(--border-soft); }
+    .admin-item-row:last-child { border-bottom: none; }
+    .admin-item-left { display: flex; align-items: flex-start; gap: 12px; flex: 1; }
+    .admin-item-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .admin-item-remark { font-size: 11px; color: var(--amber); margin-top: 4px; }
+    .admin-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .req-label { font-size: 10px; color: var(--text-3); letter-spacing: 0.5px; text-transform: uppercase; }
+    .qty-input { width: 60px; height: 42px; text-align: center; font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 500; border: 1px solid var(--border); border-radius: 8px; background: var(--canvas); color: var(--text); outline: none; padding: 0; -webkit-appearance: none; transition: border-color 0.15s, background 0.15s; }
+    .qty-input:focus { border-color: var(--navy); background: var(--surface); }
+
+    /* ── AD-HOC GROUP ── */
+    .adhoc-group { margin: 10px; border: 1px solid var(--green-border); border-radius: 9px; overflow: hidden; }
+    .adhoc-head { background: var(--green-soft); padding: 11px 14px; border-bottom: 1px dashed var(--green-border); font-size: 11px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; }
+    .adhoc-item-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; border-bottom: 1px dashed var(--green-soft); background: var(--surface); }
+    .adhoc-item-row:last-child { border-bottom: none; }
+    .adhoc-item-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .adhoc-qty { font-size: 17px; font-weight: 500; color: var(--text); min-width: 36px; text-align: center; }
+    .btn-undo { background: var(--canvas); color: var(--text-3); border: 1px solid var(--border); border-radius: 6px; padding: 5px 11px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+    .btn-undo:active { background: var(--border); }
+
+    /* ── ADD ITEM ── */
+    .add-item-bar { display: flex; gap: 8px; padding: 11px 10px; background: var(--canvas); border-top: 1px solid var(--border); align-items: center; }
+    .add-item-select { flex: 1; min-width: 0; height: 42px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; padding: 0 10px; color: var(--text); outline: none; }
+    .add-item-qty { width: 60px; flex-shrink: 0; height: 42px; text-align: center; font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 500; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); padding: 0; outline: none; -webkit-appearance: none; }
+    .btn-add-confirm { width: 42px; flex-shrink: 0; height: 42px; background: var(--green); color: #fff; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; transition: opacity 0.15s, transform 0.15s; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .btn-add-confirm:active { transform: scale(0.95); opacity: 0.85; }
+    .btn-add-trigger { width: 100%; background: var(--canvas); color: var(--text-3); border: none; border-top: 1px solid var(--border); padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.15s; }
+    .btn-add-trigger:active { background: var(--border-soft); }
+
+    /* ── NOTE & BUTTON ── */
+    .note-area { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px; width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--text); resize: vertical; min-height: 80px; outline: none; transition: border-color 0.15s; }
+    .note-area:focus { border-color: var(--navy2); }
+    .btn-primary { width: 100%; height: 52px; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: opacity 0.15s, transform 0.15s; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-red { background: var(--red); color: #fff; }
+    .btn-red:hover:not(:disabled) { background: #a33024; }
+
+    .loading { text-align: center; color: var(--text-3); padding: 40px 20px; font-size: 13px; }
+    .empty-note { padding: 18px; text-align: center; font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <div class="nav-wordmark">LOVA</div>
+      <div class="nav-tag">Admin</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="nav-user" id="navUser"></div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="section-label">Pending orders by branch</div>
+    <div id="ordersContainer"><div class="loading">Loading orders…</div></div>
+
+    <div class="section-label">Kitchen instructions</div>
+    <textarea class="note-area" id="chefNote" placeholder="e.g. Please prioritise Bianca Emsphere delivery today…"></textarea>
+
+    <button class="btn-primary btn-red" id="btnSend" onclick="submitUpdates()">Process & send PDF</button>
+  </div>
+
+  <script>
+    const GAS_URL = "YOUR_GAS_WEB_APP_URL_HERE";
+    const pin = sessionStorage.getItem("lova_pin") || "";
+    if (!pin) window.location.href = "index.html";
+
+    let adminName = "", pendingList = [], productsList = [], adHocList = [], openAdders = {};
+    const ALL_BRANCHES = ["MARKETING","BIANCA EMSPHERE","BIANCA ICONSIAM","BIANCA ONE BANGKOK","BIANCA SIAM PARAGON","LAVA","HOLYBELLY"];
+
+    async function callGAS(action, params = {}) {
+      const res = await fetch(GAS_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, ...params }) });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data.result;
+    }
+
+    async function init() {
+      try { adminName = await callGAS("verifyAdmin", { pin }); document.getElementById("navUser").textContent = adminName; await loadData(); }
+      catch (err) { alert("Session error: " + err.message); window.location.href = "index.html"; }
+    }
+
+    function logout() { sessionStorage.clear(); window.location.href = "logout.html?src=admin"; }
+
+    async function loadData() {
+      document.getElementById("ordersContainer").innerHTML = '<div class="loading">Loading orders…</div>';
+      try { const data = await callGAS("getAdminInitData"); pendingList = data.pending; productsList = data.products; renderOrders(); }
+      catch (err) { document.getElementById("ordersContainer").innerHTML = '<div class="loading">Failed to load orders.</div>'; }
+    }
+
+    function toggleAccordion(id) {
+      const body = document.getElementById("body-"+id), icon = document.getElementById("icon-"+id);
+      if (!body) return;
+      const open = body.style.display !== "none" && body.style.display !== "";
+      body.style.display = open ? "none" : "block";
+      if (icon) icon.textContent = open ? "▼" : "▲";
+    }
+
+    function toggleAdminSelectAll(box) { document.querySelectorAll(".admin-chk").forEach(c => c.checked = box.checked); }
+    function toggleGroupCheckboxes(safeOrdId, box) { document.querySelectorAll(".grp-"+safeOrdId).forEach(c => c.checked = box.checked); }
+
+    function renderOrders() {
+      const container = document.getElementById("ordersContainer");
+      const hasAny = pendingList.length > 0 || adHocList.length > 0;
+      let html = "";
+      if (hasAny) html += `<div class="select-all-bar"><label><input type="checkbox" id="selectAll" onclick="toggleAdminSelectAll(this)" checked class="admin-chk"> Select all pending items</label></div>`;
+
+      const prodOptions = `<option value="" disabled selected>Select product…</option>` + productsList.map(p => `<option value="${p}">${p}</option>`).join("");
+      const branches = [...ALL_BRANCHES];
+      pendingList.forEach(o => { if (!branches.includes(o.branch)) branches.push(o.branch); });
+
+      branches.forEach(branch => {
+        const branchPending = pendingList.filter(o => o.branch === branch);
+        const branchAdHoc = adHocList.filter(a => a.branch === branch);
+        const total = branchPending.length + branchAdHoc.length;
+        const safeBranch = branch.replace(/[^a-zA-Z0-9]/g,"");
+
+        html += `<div class="branch-block"><div class="branch-header" onclick="toggleAccordion('br-${safeBranch}')"><span>${branch} <span class="badge-count">${total} items</span></span><span id="icon-br-${safeBranch}" style="font-size:11px;opacity:0.5;">▲</span></div><div id="body-br-${safeBranch}">`;
+
+        if (total === 0) {
+          html += `<div class="empty-note">No pending orders</div>`;
+        } else {
+          const ordersMap = {};
+          branchPending.forEach(o => { if (!ordersMap[o.orderId]) ordersMap[o.orderId] = { date: o.date, orderedBy: o.orderedBy, items: [] }; ordersMap[o.orderId].items.push(o); });
+
+          for (const ordId in ordersMap) {
+            const ord = ordersMap[ordId], safeOrdId = ordId.replace(/[^a-zA-Z0-9]/g,"");
+            html += `<div class="order-group"><div class="order-group-head"><input type="checkbox" class="admin-chk" id="chk-ord-${safeOrdId}" onchange="toggleGroupCheckboxes('${safeOrdId}',this)" checked><div class="order-group-info" onclick="toggleAccordion('ord-${safeOrdId}')"><div class="order-group-id">${ordId}</div><div class="order-group-meta">By ${ord.orderedBy} · ${ord.date}</div></div><span class="toggle-icon" id="icon-ord-${safeOrdId}" onclick="toggleAccordion('ord-${safeOrdId}')">▲</span></div><div id="body-ord-${safeOrdId}">`;
+            ord.items.forEach(order => {
+              const remarkHtml = order.remark ? `<div class="admin-item-remark">✏️ ${order.remark}</div>` : "";
+              html += `<div class="admin-item-row"><div class="admin-item-left"><input type="checkbox" id="chk-row-${order.rowNum}" class="admin-chk grp-${safeOrdId}" checked><div><div class="admin-item-name">${order.item}</div>${remarkHtml}</div></div><div class="admin-item-right"><div class="req-label">Requested: ${order.qty}</div><input type="number" id="qty-row-${order.rowNum}" class="qty-input" value="${order.qty}"></div></div>`;
+            });
+            html += `</div></div>`;
+          }
+
+          if (branchAdHoc.length > 0) {
+            html += `<div class="adhoc-group"><div class="adhoc-head">Admin ad-hoc additions</div>${branchAdHoc.map(a => `<div class="adhoc-item-row"><div style="display:flex;align-items:center;gap:12px;"><input type="checkbox" id="chk-adhoc-${a.id}" class="admin-chk" checked><div class="adhoc-item-name">${a.item}</div></div><div style="display:flex;align-items:center;gap:12px;"><div class="adhoc-qty">${a.qty}</div><button class="btn-undo" onclick="removeAdHoc('${a.id}')">Undo</button></div></div>`).join("")}</div>`;
+          }
+        }
+
+        if (openAdders[safeBranch]) {
+          html += `<div class="add-item-bar"><select id="new-item-${safeBranch}" class="add-item-select">${prodOptions}</select><input type="number" id="new-qty-${safeBranch}" class="add-item-qty" placeholder="Qty"><button class="btn-add-confirm" onclick="addAdHoc('${branch}','${safeBranch}')">✓</button></div>`;
+        } else {
+          html += `<button class="btn-add-trigger" onclick="openAdder('${safeBranch}')">+ Add item to ${branch}</button>`;
+        }
+
+        html += `</div></div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function openAdder(safeBranch) { openAdders[safeBranch] = true; renderOrders(); }
+
+    function addAdHoc(branch, safeBranch) {
+      const item = document.getElementById("new-item-"+safeBranch)?.value;
+      const qty = parseInt(document.getElementById("new-qty-"+safeBranch)?.value);
+      if (!item || !qty || qty <= 0) { alert("Please select a product and enter a valid quantity."); return; }
+      adHocList.push({ id: "adhoc_"+Date.now(), branch, item, qty });
+      openAdders[safeBranch] = false; renderOrders();
+    }
+
+    function removeAdHoc(id) { adHocList = adHocList.filter(a => a.id !== id); renderOrders(); }
+
+    async function submitUpdates() {
+      const updates = [];
+      pendingList.forEach(order => {
+        if (document.getElementById("chk-row-"+order.rowNum)?.checked) {
+          const newQty = parseInt(document.getElementById("qty-row-"+order.rowNum)?.value);
+          if (!isNaN(newQty)) updates.push({ rowNum: order.rowNum, item: order.item, branch: order.branch, originalQty: order.qty, newQty, isNew: false });
+        }
+      });
+      adHocList.forEach(a => {
+        if (document.getElementById("chk-adhoc-"+a.id)?.checked) updates.push({ branch: a.branch, item: a.item, newQty: a.qty, isNew: true });
+      });
+      if (!updates.length) { alert("Please select at least one order to process."); return; }
+      const note = document.getElementById("chefNote").value;
+      const btn = document.getElementById("btnSend");
+      btn.textContent = "Processing & sending PDF…"; btn.disabled = true;
+      try {
+        const msg = await callGAS("updateAndForceSend", { payload: { updates, note, userInfo: { name: adminName, pin } } });
+        alert(msg); adHocList = []; document.getElementById("chefNote").value = "";
+        await loadData();
+      } catch (err) { alert("Error: " + err.message); }
+      btn.textContent = "Process & send PDF"; btn.disabled = false;
+    }
+
+    init();
+  </script>
+</body>
+</html>

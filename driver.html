@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LOVA — Driver Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a1f2e; --navy2: #2d3447;
+      --red: #c0392b; --red-soft: #fdf0ef; --red-border: #f5c6c2;
+      --canvas: #f7f5f0; --surface: #ffffff;
+      --border: #e4e1db; --border-soft: #ede9e3;
+      --text: #1a1f2e; --text-2: #5a5750; --text-3: #9a9690;
+      --green: #1e7d52; --green-soft: #edf7f2; --green-border: #b8e0ce;
+      --blue: #1a5fa8; --blue-soft: #eef3fb; --blue-border: #bcd3f0;
+      --amber: #925c0d; --amber-soft: #fdf5e6; --amber-border: #f5dba8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--canvas); min-height: 100vh; padding-bottom: 60px; }
+
+    .top-nav { background: var(--navy); padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .nav-left { display: flex; align-items: baseline; gap: 10px; }
+    .nav-wordmark { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .nav-tag { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; }
+    .nav-user { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.55); }
+    .btn-logout { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+    .btn-logout:active { background: rgba(255,255,255,0.14); }
+
+    .content { padding: 16px; max-width: 600px; margin: 0 auto; }
+
+    .tabs { display: flex; background: var(--canvas); border: 1px solid var(--border); border-radius: 9px; padding: 3px; margin-bottom: 14px; gap: 3px; }
+    .tab { flex: 1; text-align: center; padding: 10px 8px; font-size: 12px; font-weight: 500; color: var(--text-3); cursor: pointer; border-radius: 7px; transition: background 0.15s, color 0.15s; }
+    .tab.active { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 3px rgba(26,31,46,0.07); }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(26,31,46,0.04); }
+    .branch-label { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 6px; }
+    .branch-row { display: flex; align-items: center; justify-content: space-between; }
+    .branch-select { flex: 1; border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; }
+    .btn-refresh { background: none; border: 1px solid var(--border); border-radius: 7px; font-size: 16px; color: var(--text-3); cursor: pointer; padding: 5px 10px; border-radius: 7px; transition: background 0.15s, color 0.15s; outline: none; }
+    .btn-refresh:active { background: var(--canvas); color: var(--text); }
+
+    /* ── TOTALS ── */
+    .totals-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(26,31,46,0.04); }
+    .totals-head { padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-bottom: 1px solid var(--border-soft); }
+    .totals-head-left { display: flex; align-items: center; gap: 8px; }
+    .totals-title { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 1.5px; }
+    .badge-sm { font-size: 10px; font-weight: 500; background: var(--canvas); color: var(--text-3); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); }
+    .totals-body { padding: 0 16px; }
+    .total-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border-soft); font-size: 13px; font-weight: 500; color: var(--text); }
+    .total-row:last-child { border-bottom: none; }
+    .total-row strong { font-weight: 600; }
+
+    /* ── BREAKDOWN ── */
+    .breakdown-head { padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; background: var(--canvas); border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); cursor: pointer; }
+    .breakdown-title { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 1.5px; }
+    .select-all-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 500; color: var(--text-2); cursor: pointer; }
+    input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--blue); cursor: pointer; }
+    .order-checkbox:disabled { cursor: not-allowed; opacity: 0.35; }
+
+    /* ── ORDER BOX ── */
+    .order-box { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 13px 14px; margin-bottom: 9px; }
+    .order-box-top { display: flex; align-items: flex-start; gap: 12px; }
+    .order-box-info { flex: 1; }
+    .order-id { font-size: 12px; font-weight: 600; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+    .status-badge { display: inline-block; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: 600; margin-top: 6px; border: 1px solid; }
+    .status-prepping { background: var(--canvas); color: var(--text-3); border-color: var(--border); }
+    .status-way { background: var(--amber-soft); color: var(--amber); border-color: var(--amber-border); }
+    .status-verified { background: var(--green-soft); color: var(--green); border-color: var(--green-border); }
+    .status-delivered { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-border); }
+    .order-items-expand { display: none; margin-top: 11px; padding-top: 11px; border-top: 1px dashed var(--border); }
+    .order-sub-item { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; color: var(--text-2); padding: 5px 0; border-bottom: 1px solid var(--border-soft); }
+    .order-sub-item:last-child { border-bottom: none; }
+    .order-sub-item strong { color: var(--text); font-weight: 600; }
+    .expand-icon { font-size: 10px; color: var(--text-3); cursor: pointer; padding: 2px 4px; }
+
+    /* ── ACTION BUTTONS ── */
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; margin-bottom: 16px; }
+    .btn-action { flex: 1; height: 48px; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s, transform 0.15s; border: 1px solid transparent; }
+    .btn-action:active:not(:disabled) { transform: scale(0.98); }
+    .btn-action:disabled { background: var(--canvas); color: var(--text-3); border-color: var(--border); cursor: not-allowed; }
+    .btn-yellow { background: var(--amber-soft); color: var(--amber); border-color: var(--amber-border); }
+    .btn-yellow:hover:not(:disabled) { background: #f7e8c8; }
+    .btn-green-action { background: var(--green); color: #fff; }
+    .btn-green-action:hover:not(:disabled) { background: #176641; }
+
+    /* ── HISTORY ── */
+    .section-label { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); }
+    .history-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(26,31,46,0.04); }
+    .hist-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--border); }
+    .hist-id { font-size: 12px; font-weight: 600; color: var(--text); }
+    .hist-branch { font-size: 11px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.3px; margin-top: 2px; }
+    .hist-time { font-size: 11px; color: var(--text-3); }
+    .hist-item { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-2); font-weight: 500; padding: 6px 0; border-bottom: 1px solid var(--border-soft); }
+    .hist-item:last-child { border-bottom: none; }
+    .hist-item strong { color: var(--text); font-weight: 600; }
+
+    .loading { text-align: center; color: var(--text-3); padding: 40px 20px; font-size: 13px; }
+    .empty-state { text-align: center; color: var(--green); padding: 40px 20px; font-size: 13px; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <div class="nav-wordmark">LOVA</div>
+      <div class="nav-tag">Driver</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="nav-user" id="navUser"></div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="tabs">
+      <div class="tab active" id="tabManifest" onclick="switchTab('manifest')">Active dispatch</div>
+      <div class="tab" id="tabHistory" onclick="switchTab('history')">Past deliveries</div>
+    </div>
+
+    <div id="viewManifest">
+      <div class="card" id="branchCard" style="display:none;">
+        <span class="branch-label">Delivering to</span>
+        <div class="branch-row">
+          <select id="branchSelector" class="branch-select" onchange="renderSelectedBranch()"></select>
+          <button class="btn-refresh" onclick="fetchManifest()" title="Refresh">↻</button>
+        </div>
+      </div>
+      <div id="manifestContent"><div class="loading">Loading dispatch manifest…</div></div>
+    </div>
+
+    <div id="viewHistory" style="display:none;">
+      <div class="section-label">Past deliveries — last 7 days</div>
+      <div id="historyContent"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "YOUR_GAS_WEB_APP_URL_HERE";
+    const pin = sessionStorage.getItem("lova_pin") || "";
+    if (!pin) window.location.href = "index.html";
+
+    let driverName = "", manifestData = {}, selectedBranch = "";
+
+    async function callGAS(action, params = {}) {
+      const res = await fetch(GAS_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, ...params }) });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data.result;
+    }
+
+    async function init() {
+      try { driverName = await callGAS("verifyDriver", { pin }); document.getElementById("navUser").textContent = driverName; fetchManifest(); fetchHistory(); }
+      catch (err) { alert("Session error: " + err.message); window.location.href = "index.html"; }
+    }
+
+    function logout() { sessionStorage.clear(); window.location.href = "logout.html?src=driver"; }
+
+    function switchTab(tab) {
+      document.getElementById("tabManifest").classList.toggle("active", tab === "manifest");
+      document.getElementById("tabHistory").classList.toggle("active", tab === "history");
+      document.getElementById("viewManifest").style.display = tab === "manifest" ? "block" : "none";
+      document.getElementById("viewHistory").style.display = tab === "history" ? "block" : "none";
+    }
+
+    async function fetchManifest() {
+      document.getElementById("manifestContent").innerHTML = '<div class="loading">Syncing dispatch data…</div>';
+      try {
+        manifestData = await callGAS("getDriverManifest");
+        const branches = Object.keys(manifestData);
+        const card = document.getElementById("branchCard"), sel = document.getElementById("branchSelector");
+        if (!branches.length) { card.style.display = "none"; document.getElementById("manifestContent").innerHTML = '<div class="empty-state">All clear — no active dispatch.</div>'; return; }
+        card.style.display = "block";
+        if (!selectedBranch || !branches.includes(selectedBranch)) selectedBranch = branches[0];
+        sel.innerHTML = branches.map(b => { const units = Object.values(manifestData[b].totals).reduce((s,v)=>s+v,0); return `<option value="${b}" ${b===selectedBranch?"selected":""}>${b} (${units} units)</option>`; }).join("");
+        renderSelectedBranch();
+      } catch (err) { document.getElementById("manifestContent").innerHTML = '<div class="loading">Failed to load manifest.</div>'; }
+    }
+
+    function renderSelectedBranch() {
+      selectedBranch = document.getElementById("branchSelector").value;
+      const branchData = manifestData[selectedBranch];
+      if (!branchData) return;
+
+      const safeCls = "chk-" + selectedBranch.replace(/[^a-zA-Z0-9]/g,"");
+      const totalUnits = Object.values(branchData.totals).reduce((s,v)=>s+v,0);
+      const uniqueItems = Object.keys(branchData.totals).length;
+      const totalOrders = Object.keys(branchData.orders).length;
+      let hasSent = false, hasVerified = false;
+      for (const o in branchData.orders) { if (branchData.orders[o].status === "SENT") hasSent = true; if (branchData.orders[o].status === "STAFF VERIFIED") hasVerified = true; }
+
+      let html = `
+        <div class="totals-card">
+          <div class="totals-head" onclick="toggleExpand('totals')">
+            <div class="totals-head-left"><span class="totals-title">Total for truck</span><span class="badge-sm">${uniqueItems} items · ${totalUnits} units</span></div>
+            <span id="icon-totals" style="font-size:10px;color:var(--text-3);">▲</span>
+          </div>
+          <div id="body-totals" class="totals-body">
+            ${Object.entries(branchData.totals).map(([item,qty]) => `<div class="total-row"><span>${item}</span><strong>${qty}</strong></div>`).join("")}
+          </div>
+        </div>
+
+        <div class="totals-card">
+          <div class="breakdown-head" onclick="toggleExpand('breakdown')">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="breakdown-title">Order breakdown</span>
+              <span class="badge-sm">${totalOrders} orders</span>
+              <span id="icon-breakdown" style="font-size:10px;color:var(--text-3);">▲</span>
+            </div>
+            <label class="select-all-label" onclick="event.stopPropagation()">
+              <input type="checkbox" onclick="toggleSelectAll('${safeCls}',this)" checked> Select all
+            </label>
+          </div>
+          <div id="body-breakdown" style="padding:12px 12px 0;">`;
+
+      for (const orderId in branchData.orders) {
+        const order = branchData.orders[orderId];
+        const isPrepping = order.status === "SENT", isOnWay = order.status === "ON THE WAY", isVerified = order.status === "STAFF VERIFIED";
+        const badgeClass = isPrepping ? "status-prepping" : isVerified ? "status-verified" : isOnWay ? "status-way" : "status-delivered";
+        const badgeText = isPrepping ? "Prepping" : isVerified ? "Chef confirmed" : isOnWay ? "On the way" : order.status;
+        html += `
+          <div class="order-box" style="${isOnWay?"opacity:0.6":""}">
+            <div class="order-box-top">
+              <input type="checkbox" class="${safeCls} order-checkbox" value="${orderId}" data-status="${order.status}" ${isOnWay?"disabled":"checked"}>
+              <div class="order-box-info" onclick="toggleOrderExpand('${orderId}')">
+                <div class="order-id"><span>${orderId}</span><span class="expand-icon" id="icon-ord-${orderId}">▼</span></div>
+                <div class="status-badge ${badgeClass}">${badgeText}</div>
+              </div>
+            </div>
+            <div class="order-items-expand" id="exp-${orderId}">
+              ${order.items.map(i=>`<div class="order-sub-item"><span>${i.name}</span><strong>${i.qty}</strong></div>`).join("")}
+            </div>
+          </div>`;
+      }
+
+      html += `</div>
+          <div class="btn-row" style="padding:0 12px 14px;">
+            <button class="btn-action btn-yellow" id="btn-out-${safeCls}" ${hasSent?"":"disabled"} onclick="submitUpdate('${safeCls}','ON THE WAY')">Out for delivery</button>
+            <button class="btn-action btn-green-action" id="btn-del-${safeCls}" ${hasVerified?"":"disabled"} onclick="submitUpdate('${safeCls}','DELIVERED')">Set delivered</button>
+          </div>
+        </div>`;
+
+      document.getElementById("manifestContent").innerHTML = html;
+    }
+
+    function toggleExpand(section) {
+      const body = document.getElementById("body-"+section), icon = document.getElementById("icon-"+section);
+      if (!body) return;
+      const open = body.style.display !== "none";
+      body.style.display = open ? "none" : "block";
+      if (icon) icon.textContent = open ? "▼" : "▲";
+    }
+
+    function toggleOrderExpand(orderId) {
+      const exp = document.getElementById("exp-"+orderId), icon = document.getElementById("icon-ord-"+orderId);
+      if (!exp) return;
+      const open = exp.style.display === "block";
+      exp.style.display = open ? "none" : "block";
+      if (icon) icon.textContent = open ? "▼" : "▲";
+    }
+
+    function toggleSelectAll(cls, box) { document.querySelectorAll("."+cls).forEach(c => { if (!c.disabled) c.checked = box.checked; }); }
+
+    async function submitUpdate(safeCls, newStatus) {
+      const checkboxes = document.querySelectorAll("."+safeCls);
+      const selectedIds = [];
+      checkboxes.forEach(c => {
+        if (!c.checked) return;
+        const status = c.dataset.status;
+        if (newStatus === "ON THE WAY" && status !== "SENT") return;
+        if (newStatus === "DELIVERED" && status !== "STAFF VERIFIED") return;
+        selectedIds.push(c.value);
+      });
+      if (!selectedIds.length) { alert("No valid orders selected.\n\n(Yellow button — Prepping orders only · Green button — Chef confirmed orders only)"); return; }
+      const label = newStatus === "ON THE WAY" ? "Out for delivery" : "Delivered";
+      if (!confirm(`Confirm: mark ${selectedIds.length} order(s) as ${label}?`)) return;
+      const btnOut = document.getElementById("btn-out-"+safeCls), btnDel = document.getElementById("btn-del-"+safeCls);
+      if (btnOut) { btnOut.textContent = "Updating…"; btnOut.disabled = true; }
+      if (btnDel) { btnDel.textContent = "Updating…"; btnDel.disabled = true; }
+      try {
+        await callGAS("updateDriverStatus", { orderIds: selectedIds, newStatus, driverName });
+        fetchManifest(); fetchHistory();
+      } catch (err) {
+        alert("Error: "+err.message);
+        if (btnOut) { btnOut.textContent = "Out for delivery"; btnOut.disabled = false; }
+        if (btnDel) { btnDel.textContent = "Set delivered"; btnDel.disabled = false; }
+      }
+    }
+
+    async function fetchHistory() {
+      try { renderHistory(await callGAS("getDriverHistory", { driverName })); }
+      catch { document.getElementById("historyContent").innerHTML = '<div class="loading">Could not load history.</div>'; }
+    }
+
+    function renderHistory(data) {
+      const container = document.getElementById("historyContent");
+      if (!data.length) { container.innerHTML = '<div class="loading">No past deliveries found.</div>'; return; }
+      const grouped = {};
+      data.forEach(item => { if (!grouped[item.id]) grouped[item.id] = { time: item.time, branch: item.branch, status: item.status, items: [] }; grouped[item.id].items.push(item); });
+      container.innerHTML = Object.entries(grouped).map(([oId, order]) => {
+        const statusColor = order.status === "DELIVERED" ? "var(--green)" : "var(--blue)";
+        const displayStatus = order.status === "SENT" ? "Prepping" : order.status;
+        return `<div class="history-card"><div class="hist-top"><div><div class="hist-id">${oId}</div><div class="hist-branch">${order.branch}</div></div><div style="text-align:right"><div style="font-size:11px;font-weight:600;color:${statusColor};">${displayStatus}</div><div class="hist-time">${order.time}</div></div></div>${order.items.map(sub=>`<div class="hist-item"><span>${sub.item}</span><strong>×${sub.qty}</strong></div>`).join("")}</div>`;
+      }).join("");
+    }
+
+    init();
+  </script>
+</body>
+</html>
