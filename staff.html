@@ -166,6 +166,12 @@
       <div class="modal-sub" id="modalBranch"></div>
       <div class="modal-list" id="modalList"></div>
       <div class="modal-total" id="modalTotal"></div>
+      
+      <div style="margin-bottom: 18px; padding: 12px; background: var(--red-soft); border: 1px dashed var(--red-border); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="urgentCheck" style="width: 18px; height: 18px; accent-color: var(--red); cursor: pointer;">
+        <label for="urgentCheck" style="font-size: 13px; font-weight: 600; color: var(--red); cursor: pointer;">Mark order as URGENT 🔴</label>
+      </div>
+
       <div class="modal-btns">
         <button class="btn-cancel" id="btn_go_back" onclick="closeModal()">Go back</button>
         <button class="btn-confirm" id="btnConfirm" onclick="confirmOrder()">Confirm & send</button>
@@ -283,11 +289,15 @@
       document.getElementById("reviewModal").classList.add("open");
     }
     function closeModal(){document.getElementById("reviewModal").classList.remove("open");}
+    
+    // URGENT FLAG ADDED HERE //
     async function confirmOrder(){
       const btn=document.getElementById("btnConfirm");btn.textContent=t("sending");btn.disabled=true;
+      const isUrgent = document.getElementById("urgentCheck")?.checked || false;
       try{
-        const msg=await callGAS("processOrder",{orderData:pendingOrderData,userInfo:{name:currentUser.name,pin},targetBranch:selectedBranch});
+        const msg=await callGAS("processOrder",{orderData:pendingOrderData,userInfo:{name:currentUser.name,pin},targetBranch:selectedBranch, isUrgent: isUrgent});
         closeModal();alert(msg);
+        if(document.getElementById("urgentCheck")) document.getElementById("urgentCheck").checked = false;
         masterProducts.forEach((_,i)=>{const el=document.getElementById("qty-"+i);if(el)el.value="";});
         document.querySelectorAll(".product-card").forEach(c=>c.classList.remove("has-qty"));
         await fetchDeliveries();switchTab("receive");
