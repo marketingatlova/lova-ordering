@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>LOVA — Branch Ordering</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --navy: #1a1f2e; --navy2: #2d3447;
@@ -12,29 +12,39 @@
       --canvas: #f7f5f0; --surface: #ffffff;
       --border: #e4e1db; --border-soft: #ede9e3;
       --text: #1a1f2e; --text-2: #5a5750; --text-3: #9a9690;
+      /* Status pipeline */
+      --s-grey: #64748b;    --s-grey-bg: #f1f5f9;    --s-grey-border: #cbd5e1;
+      --s-blue: #1a5fa8;    --s-blue-bg: #eef3fb;    --s-blue-border: #bcd3f0;
+      --s-amber: #92570a;   --s-amber-bg: #fef3c7;   --s-amber-border: #fcd34d;
+      --s-teal: #0f766e;    --s-teal-bg: #ccfbf1;    --s-teal-border: #5eead4;
+      --s-green: #166534;   --s-green-bg: #dcfce7;   --s-green-border: #86efac;
+      --s-red: #c0392b;     --s-red-bg: #fdf0ef;     --s-red-border: #f5c6c2;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--canvas); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    body { font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; background: var(--canvas); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 380px; overflow: hidden; box-shadow: 0 4px 24px rgba(26,31,46,0.08); }
-    .card-top { padding: 36px 32px 28px; text-align: center; border-bottom: 1px solid var(--border-soft); }
-    .wordmark { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--text); letter-spacing: 2px; }
+    .card-top { padding: 28px 32px 22px; text-align: center; border-bottom: 1px solid var(--border-soft); position: relative; }
+    .lang-toggle { position: absolute; top: 16px; right: 16px; display: flex; background: var(--canvas); border: 1px solid var(--border); border-radius: 20px; padding: 3px; gap: 2px; }
+    .lang-btn { padding: 4px 10px; border-radius: 16px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-3); transition: all 0.15s; }
+    .lang-btn.active { background: var(--navy); color: #fff; }
+    .wordmark { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--text); letter-spacing: 2px; margin-top: 8px; }
     .wordmark-accent { display: block; width: 28px; height: 2px; background: var(--red); border-radius: 1px; margin: 8px auto 10px; }
-    .wordmark-sub { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 2.5px; text-transform: uppercase; }
+    .wordmark-sub { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 2px; text-transform: uppercase; }
     .card-body { padding: 28px 32px 32px; }
     .field-label { font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 8px; }
-    .pin-input { width: 100%; height: 56px; background: var(--canvas); border: 1.5px solid var(--border); border-radius: 10px; text-align: center; font-family: 'DM Sans', monospace; font-size: 26px; font-weight: 500; letter-spacing: 10px; color: var(--text); outline: none; -webkit-appearance: none; transition: border-color 0.2s, background 0.2s; margin-bottom: 6px; }
+    .pin-input { width: 100%; height: 56px; background: var(--canvas); border: 1.5px solid var(--border); border-radius: 10px; text-align: center; font-family: 'Plus Jakarta Sans', monospace; font-size: 26px; font-weight: 500; letter-spacing: 10px; color: var(--text); outline: none; -webkit-appearance: none; transition: border-color 0.2s, background 0.2s; margin-bottom: 6px; }
     .pin-input:focus { border-color: var(--navy); background: #fff; }
     .pin-input.shake { border-color: var(--red); animation: shake 0.35s ease; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 60%{transform:translateX(5px)} }
     .error-msg { font-size: 12px; font-weight: 500; color: var(--red); min-height: 20px; margin-bottom: 14px; text-align: center; }
-    .btn { width: 100%; height: 50px; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s, transform 0.15s; }
+    .btn { width: 100%; height: 50px; border: none; border-radius: 10px; font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.3px; cursor: pointer; transition: opacity 0.15s, transform 0.15s; }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
     .btn-primary { background: var(--navy); color: #fff; }
     .btn-primary:hover:not(:disabled) { background: var(--navy2); }
     #adminHub { display: none; }
     .welcome-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .welcome-hint { font-size: 12px; font-weight: 400; color: var(--text-3); margin-bottom: 24px; }
+    .welcome-hint { font-size: 12px; color: var(--text-3); margin-bottom: 24px; }
     .hub-btn { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 14px; text-align: left; transition: border-color 0.15s, background 0.15s, transform 0.1s; }
     .hub-btn:hover { background: var(--canvas); border-color: var(--navy2); }
     .hub-btn:active { transform: scale(0.99); }
@@ -54,33 +64,37 @@
 <body>
   <div class="card">
     <div class="card-top">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="btnTH" onclick="setLang('th')">TH</button>
+      </div>
       <div class="wordmark">LOVA</div>
       <span class="wordmark-accent"></span>
-      <div class="wordmark-sub">Branch Ordering System</div>
+      <div class="wordmark-sub" id="txt_system">Branch Ordering System</div>
     </div>
     <div class="card-body">
       <div id="loginView">
-        <label class="field-label" for="universalPin">Access PIN</label>
+        <label class="field-label" id="txt_pin_label">Access PIN</label>
         <input type="password" id="universalPin" class="pin-input" placeholder="····" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off">
         <div class="error-msg" id="errorMsg"></div>
         <button class="btn btn-primary" id="btnEnter" onclick="verifyLogin()">Authenticate</button>
       </div>
       <div id="adminHub">
         <div class="welcome-name" id="welcomeName">Welcome</div>
-        <div class="welcome-hint">Select your portal to continue</div>
+        <div class="welcome-hint" id="txt_select_portal">Select your portal to continue</div>
         <button class="hub-btn" onclick="goTo('staff', this)">
           <div class="hub-icon staff">🍳</div>
-          <div class="hub-info"><div class="hub-title">Kitchen Staff Portal</div><div class="hub-desc">Place and track branch orders</div></div>
+          <div class="hub-info"><div class="hub-title" id="txt_staff_title">Kitchen Staff Portal</div><div class="hub-desc" id="txt_staff_desc">Place and track branch orders</div></div>
           <div class="hub-arrow">→</div>
         </button>
         <button class="hub-btn" onclick="goTo('driver', this)">
           <div class="hub-icon driver">🚚</div>
-          <div class="hub-info"><div class="hub-title">Driver Dispatch Portal</div><div class="hub-desc">Manage deliveries and manifests</div></div>
+          <div class="hub-info"><div class="hub-title" id="txt_driver_title">Driver Dispatch Portal</div><div class="hub-desc" id="txt_driver_desc">Manage deliveries and manifests</div></div>
           <div class="hub-arrow">→</div>
         </button>
         <button class="hub-btn is-admin" onclick="goTo('admin', this)">
           <div class="hub-icon admin">⚙️</div>
-          <div class="hub-info"><div class="hub-title">Admin Control Tower</div><div class="hub-desc">Review, edit and dispatch orders</div></div>
+          <div class="hub-info"><div class="hub-title" id="txt_admin_title">Admin Control Tower</div><div class="hub-desc" id="txt_admin_desc">Review, edit and dispatch orders</div></div>
           <div class="hub-arrow">→</div>
         </button>
       </div>
@@ -89,14 +103,36 @@
   </div>
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbzeZ8CLU50nn2MDA6EoU0ZKnu8qihZRU-LhAgsk9GVqa7TKA44J5fVx-lMu-oeFiGWqfA/exec";
+    const T = {
+      en: { system:"Branch Ordering System", pin_label:"Access PIN", authenticate:"Authenticate", verifying:"Verifying…", select_portal:"Select your portal to continue", staff_title:"Kitchen Staff Portal", staff_desc:"Place and track branch orders", driver_title:"Driver Dispatch Portal", driver_desc:"Manage deliveries and manifests", admin_title:"Admin Control Tower", admin_desc:"Review, edit and dispatch orders", welcome:"Welcome, " },
+      th: { system:"ระบบสั่งของสาขา", pin_label:"รหัสเข้าใช้งาน", authenticate:"เข้าสู่ระบบ", verifying:"กำลังตรวจสอบ…", select_portal:"เลือกพอร์ทัลที่ต้องการใช้งาน", staff_title:"พอร์ทัลสำหรับพนักงาน", staff_desc:"สั่งและติดตามออเดอร์ของสาขา", driver_title:"พอร์ทัลสำหรับคนขับ", driver_desc:"จัดการการจัดส่งและใบงาน", admin_title:"พอร์ทัลผู้ดูแลระบบ", admin_desc:"ตรวจสอบ แก้ไข และจัดส่งออเดอร์", welcome:"ยินดีต้อนรับ, " }
+    };
+    let currentLang = sessionStorage.getItem("lova_lang") || "en";
     let userPin = "";
+    function setLang(lang) {
+      currentLang = lang; sessionStorage.setItem("lova_lang", lang);
+      document.getElementById("btnEN").classList.toggle("active", lang==="en");
+      document.getElementById("btnTH").classList.toggle("active", lang==="th");
+      const t = T[lang];
+      document.getElementById("txt_system").textContent = t.system;
+      document.getElementById("txt_pin_label").textContent = t.pin_label;
+      document.getElementById("btnEnter").textContent = t.authenticate;
+      document.getElementById("txt_select_portal").textContent = t.select_portal;
+      document.getElementById("txt_staff_title").textContent = t.staff_title;
+      document.getElementById("txt_staff_desc").textContent = t.staff_desc;
+      document.getElementById("txt_driver_title").textContent = t.driver_title;
+      document.getElementById("txt_driver_desc").textContent = t.driver_desc;
+      document.getElementById("txt_admin_title").textContent = t.admin_title;
+      document.getElementById("txt_admin_desc").textContent = t.admin_desc;
+    }
+    setLang(currentLang);
     document.getElementById("universalPin").addEventListener("keyup", e => {
       if (e.key === "Enter") verifyLogin();
       document.getElementById("errorMsg").textContent = "";
       e.target.classList.remove("shake");
     });
-    async function callGAS(action, params = {}) {
-      const res = await fetch(GAS_URL + "?callback=_", { method: "POST", body: JSON.stringify({ action, ...params }), headers: { "Content-Type": "text/plain" } });
+    async function callGAS(action, params={}) {
+      const res = await fetch(GAS_URL+"?callback=_", { method:"POST", body:JSON.stringify({action,...params}), headers:{"Content-Type":"text/plain"} });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       return data.result;
@@ -105,29 +141,29 @@
       userPin = document.getElementById("universalPin").value.trim();
       if (!userPin) return;
       const btn = document.getElementById("btnEnter");
-      btn.textContent = "Verifying…"; btn.disabled = true;
+      btn.textContent = T[currentLang].verifying; btn.disabled = true;
       try {
-        const user = await callGAS("universalVerify", { pin: userPin });
+        const user = await callGAS("universalVerify", {pin: userPin});
         if (user.role === "Admin") {
           document.getElementById("loginView").style.display = "none";
           document.getElementById("adminHub").style.display = "block";
-          document.getElementById("welcomeName").textContent = "Welcome, " + user.name.split(" ")[0];
-          btn.textContent = "Authenticate"; btn.disabled = false;
+          document.getElementById("welcomeName").textContent = T[currentLang].welcome + user.name.split(" ")[0];
+          btn.textContent = T[currentLang].authenticate; btn.disabled = false;
         } else {
           sessionStorage.setItem("lova_pin", userPin);
           window.location.href = user.role === "Driver" ? "driver.html" : "staff.html";
         }
-      } catch (err) {
+      } catch(err) {
         document.getElementById("errorMsg").textContent = err.message;
         const inp = document.getElementById("universalPin");
         inp.classList.add("shake"); inp.value = "";
-        btn.textContent = "Authenticate"; btn.disabled = false;
+        btn.textContent = T[currentLang].authenticate; btn.disabled = false;
       }
     }
     function goTo(mode, btn) {
       if (btn) { btn.style.opacity = "0.55"; btn.disabled = true; }
       sessionStorage.setItem("lova_pin", userPin);
-      window.location.href = mode === "admin" ? "admin.html" : mode === "driver" ? "driver.html" : "staff.html";
+      window.location.href = mode==="admin" ? "admin.html" : mode==="driver" ? "driver.html" : "staff.html";
     }
   </script>
 </body>
