@@ -98,8 +98,8 @@
   <script>
     const GAS_URL="https://script.google.com/macros/s/AKfycbzeZ8CLU50nn2MDA6EoU0ZKnu8qihZRU-LhAgsk9GVqa7TKA44J5fVx-lMu-oeFiGWqfA/exec";
     const T={
-      en:{nav_tag:"Admin",logout:"Logout",pending:"Pending orders by branch",instructions:"Kitchen instructions",process_send:"Process & send PDF",processing:"Processing & sending…",select_all:"Select all pending items",no_pending:"No pending orders",add_item_to:"Add item to",admin_adhoc:"Admin ad-hoc additions",requested:"Requested",undo:"Undo",by:"By",items:"items",loading:"Loading…"},
-      th:{nav_tag:"แอดมิน",logout:"ออกจากระบบ",pending:"ออเดอร์ที่รอดำเนินการตามสาขา",instructions:"หมายเหตุสำหรับครัว",process_send:"ประมวลผลและส่ง PDF",processing:"กำลังประมวลผลและส่ง…",select_all:"เลือกรายการที่รอดำเนินการทั้งหมด",no_pending:"ไม่มีออเดอร์ที่รอดำเนินการ",add_item_to:"เพิ่มสินค้าให้",admin_adhoc:"รายการเพิ่มเติมจากแอดมิน",requested:"จำนวนที่ขอ",undo:"ยกเลิก",by:"โดย",items:"รายการ",loading:"กำลังโหลด…"}
+      en:{nav_tag:"Admin",logout:"Logout",pending:"Pending orders by branch",instructions:"Kitchen instructions",process_send:"Process & send PDF",processing:"Processing & sending…",select_all:"Select all",no_pending:"No pending orders",add_item_to:"Add item to",admin_adhoc:"Admin ad-hoc additions",requested:"Requested",undo:"Undo",by:"By",items:"items",loading:"Loading…"},
+      th:{nav_tag:"แอดมิน",logout:"ออกจากระบบ",pending:"ออเดอร์ที่รอดำเนินการตามสาขา",instructions:"หมายเหตุสำหรับครัว",process_send:"ประมวลผลและส่ง PDF",processing:"กำลังประมวลผลและส่ง…",select_all:"เลือกทั้งหมด",no_pending:"ไม่มีออเดอร์ที่รอดำเนินการ",add_item_to:"เพิ่มสินค้าให้",admin_adhoc:"รายการเพิ่มเติมจากแอดมิน",requested:"จำนวนที่ขอ",undo:"ยกเลิก",by:"โดย",items:"รายการ",loading:"กำลังโหลด…"}
     };
     let currentLang=sessionStorage.getItem("lova_lang")||"en";
     const pin=sessionStorage.getItem("lova_pin")||"";
@@ -165,7 +165,6 @@
             html+=`<div class="order-group"><div class="order-group-head"><input type="checkbox" class="admin-chk" id="chk-ord-${safeOrdId}" onchange="toggleGroupCheckboxes('${safeOrdId}',this)" checked><div class="order-group-info" onclick="toggleAccordion('ord-${safeOrdId}')"><div class="order-group-id">${ordId}</div><div class="order-group-meta">${t("by")} ${ord.orderedBy} · ${ord.date}</div></div><span class="toggle-icon" id="icon-ord-${safeOrdId}" onclick="toggleAccordion('ord-${safeOrdId}')">▲</span></div><div id="body-ord-${safeOrdId}">`;
             
             ord.items.forEach(order=>{
-              // URGENT BADGE STYLING APPLIED HERE //
               const isUrgent = order.remark && order.remark.includes("🔴 URGENT");
               const rStyle = isUrgent ? "color: var(--red); font-weight: 700; background: var(--red-soft); padding: 3px 6px; border-radius: 4px; display: inline-block; border: 1px solid var(--red-border);" : "color: var(--s-amber);";
               const remarkHtml=order.remark?`<div class="admin-item-remark" style="${rStyle}">${order.remark}</div>`:"";
@@ -175,11 +174,22 @@
             html+=`</div></div>`;
           }
           if(bAdHoc.length>0){
-            html+=`<div class="adhoc-group"><div class="adhoc-head">${t("admin_adhoc")}</div>${bAdHoc.map(a=>`<div class="adhoc-item-row"><div style="display:flex;align-items:center;gap:12px;"><input type="checkbox" id="chk-adhoc-${a.id}" class="admin-chk" checked><div class="adhoc-item-name">${a.item}</div></div><div style="display:flex;align-items:center;gap:12px;"><div class="adhoc-qty">${a.qty}</div><button class="btn-undo" onclick="removeAdHoc('${a.id}')">${t("undo")}</button></div></div>`).join("")}</div>`;
+            html+=`<div class="adhoc-group"><div class="adhoc-head">${t("admin_adhoc")}</div>${bAdHoc.map(a=>{
+              const urgHtml = a.isUrgent ? `<span style="color:var(--red);font-size:10px;font-weight:700;margin-left:8px;background:var(--red-soft);padding:2px 4px;border-radius:4px;border:1px solid var(--red-border);">🔴 URGENT</span>` : '';
+              return `<div class="adhoc-item-row"><div style="display:flex;align-items:center;gap:12px;"><input type="checkbox" id="chk-adhoc-${a.id}" class="admin-chk" checked><div class="adhoc-item-name">${a.item}${urgHtml}</div></div><div style="display:flex;align-items:center;gap:12px;"><div class="adhoc-qty">${a.qty}</div><button class="btn-undo" onclick="removeAdHoc('${a.id}')">${t("undo")}</button></div></div>`;
+            }).join("")}</div>`;
           }
         }
         if(openAdders[safeBranch]){
-          html+=`<div class="add-item-bar"><select id="new-item-${safeBranch}" class="add-item-select">${prodOptions}</select><input type="number" id="new-qty-${safeBranch}" class="add-item-qty" placeholder="${currentLang==="th"?"จำนวน":"Qty"}"><button class="btn-add-confirm" onclick="addAdHoc('${branch}','${safeBranch}')">✓</button></div>`;
+          html+=`<div class="add-item-bar">
+            <select id="new-item-${safeBranch}" class="add-item-select">${prodOptions}</select>
+            <input type="number" id="new-qty-${safeBranch}" class="add-item-qty" placeholder="${currentLang==="th"?"จำนวน":"Qty"}">
+            <label style="display:flex; align-items:center; gap:4px; font-size:11px; color:var(--red); font-weight:700; cursor:pointer;">
+              <input type="checkbox" id="new-urg-${safeBranch}" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;">
+              URGENT
+            </label>
+            <button class="btn-add-confirm" onclick="addAdHoc('${branch}','${safeBranch}')">✓</button>
+          </div>`;
         }else{
           html+=`<button class="btn-add-trigger" onclick="openAdder('${safeBranch}')">+ ${t("add_item_to")} ${branch}</button>`;
         }
@@ -189,22 +199,30 @@
     }
     
     function openAdder(safeBranch){openAdders[safeBranch]=true;renderOrders();}
+    
     function addAdHoc(branch,safeBranch){
       const item=document.getElementById("new-item-"+safeBranch)?.value;
       const qty=parseInt(document.getElementById("new-qty-"+safeBranch)?.value);
+      const isUrgent=document.getElementById("new-urg-"+safeBranch)?.checked || false;
       if(!item||!qty||qty<=0){alert(currentLang==="th"?"กรุณาเลือกสินค้าและระบุจำนวน":"Please select a product and enter a valid quantity.");return;}
-      adHocList.push({id:"adhoc_"+Date.now(),branch,item,qty});openAdders[safeBranch]=false;renderOrders();
+      adHocList.push({id:"adhoc_"+Date.now(),branch,item,qty,isUrgent});openAdders[safeBranch]=false;renderOrders();
     }
+    
     function removeAdHoc(id){adHocList=adHocList.filter(a=>a.id!==id);renderOrders();}
+    
     async function submitUpdates(){
       const updates=[];
       pendingList.forEach(order=>{
         if(document.getElementById("chk-row-"+order.rowNum)?.checked){
           const newQty=parseInt(document.getElementById("qty-row-"+order.rowNum)?.value);
-          if(!isNaN(newQty))updates.push({rowNum:order.rowNum,item:order.item,branch:order.branch,originalQty:order.qty,newQty,isNew:false,orderId:order.orderId,orderedBy:order.orderedBy});
+          // NEW: We are now passing the original remark to the backend to preserve the URGENT flag
+          if(!isNaN(newQty))updates.push({rowNum:order.rowNum,item:order.item,branch:order.branch,originalQty:order.qty,newQty,isNew:false,orderId:order.orderId,orderedBy:order.orderedBy,originalRemark:order.remark});
         }
       });
-      adHocList.forEach(a=>{if(document.getElementById("chk-adhoc-"+a.id)?.checked)updates.push({branch:a.branch,item:a.item,newQty:a.qty,isNew:true});});
+      
+      // NEW: We are passing the isUrgent flag for brand new ad-hoc items
+      adHocList.forEach(a=>{if(document.getElementById("chk-adhoc-"+a.id)?.checked)updates.push({branch:a.branch,item:a.item,newQty:a.qty,isNew:true,isUrgent:a.isUrgent});});
+      
       if(!updates.length){alert(currentLang==="th"?"กรุณาเลือกออเดอร์อย่างน้อยหนึ่งรายการ":"Please select at least one order to process.");return;}
       const note=document.getElementById("chefNote").value;
       const btn=document.getElementById("btnSend");btn.textContent=t("processing");btn.disabled=true;
