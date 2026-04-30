@@ -59,20 +59,19 @@
     .s-green{background:var(--s-green-bg);color:var(--s-green);border-color:var(--s-green-border);}
     .order-box{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:13px 14px;margin-bottom:9px;}
     .order-box-top{display:flex;align-items:flex-start;gap:12px;}
-    .order-box-info{flex:1;}
-    .order-id{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;justify-content:space-between;}
+    .order-box-info{flex:1;cursor:pointer;}
+    .order-id-row{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;justify-content:space-between;}
+    .expand-icon{font-size:10px;color:var(--text-3);padding:2px 4px;}
     .order-items-expand{display:none;margin-top:11px;padding-top:11px;border-top:1px dashed var(--border);}
     .order-sub-item{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--text-2);padding:5px 0;border-bottom:1px solid var(--border-soft);}
     .order-sub-item:last-child{border-bottom:none;}
     .order-sub-item strong{color:var(--text);font-weight:600;}
-    .expand-icon{font-size:10px;color:var(--text-3);cursor:pointer;padding:2px 4px;}
 
-    /* ── PHOTO STEPS ── */
-    .photo-step{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft);}
-    .photo-step.show{display:block;}
+    /* PHOTO */
+    .photo-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft);}
     .step-label{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
     .step-dot{width:18px;height:18px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .photo-trigger{position:relative;border:1.5px dashed var(--border);border-radius:9px;padding:16px;text-align:center;cursor:pointer;overflow:hidden;background:var(--canvas);transition:all 0.15s;}
+    .photo-trigger{position:relative;border:1.5px dashed var(--border);border-radius:9px;padding:16px;text-align:center;cursor:pointer;overflow:hidden;background:var(--canvas);transition:border-color 0.15s;}
     .photo-trigger:hover{border-color:var(--text-2);}
     .photo-trigger.has-photo{border-color:var(--s-green);border-style:solid;background:#f0fdf4;}
     .photo-trigger input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
@@ -86,17 +85,20 @@
     .photo-msg.ok{color:var(--s-green);}
     .photo-msg.err{color:var(--red);}
 
-    /* ── ACTION BUTTONS ── */
-    .btn-row{display:flex;gap:10px;margin-top:16px;margin-bottom:16px;}
-    .btn-action{flex:1;height:50px;border:1.5px solid;border-radius:10px;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.3px;}
-    .btn-action:active:not(:disabled){transform:scale(0.98);}
-    .btn-action:disabled{background:var(--canvas);color:var(--text-3);border-color:var(--border);cursor:not-allowed;font-weight:500;}
+    /* BUTTONS */
+    .order-action-btn{width:100%;height:46px;margin-top:12px;border-radius:9px;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.3px;border:1.5px solid;}
+    .order-action-btn:active:not(:disabled){transform:scale(0.98);}
+    .order-action-btn:disabled{background:var(--canvas);color:var(--text-3);border-color:var(--border);cursor:not-allowed;font-weight:500;}
     .btn-out-delivery{background:var(--s-amber-bg);color:var(--s-amber);border-color:var(--s-amber-border);}
-    .btn-out-delivery:hover:not(:disabled){background:#fde68a;}
     .btn-set-delivered{background:var(--s-green);color:#fff;border-color:var(--s-green);}
-    .btn-set-delivered:hover:not(:disabled){background:#15803d;}
+    .btn-row{display:flex;gap:10px;margin-top:16px;margin-bottom:16px;padding:0 12px;}
+    .btn-bulk{flex:1;height:50px;border:1.5px solid;border-radius:10px;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity 0.15s,transform 0.15s;letter-spacing:0.3px;}
+    .btn-bulk:active:not(:disabled){transform:scale(0.98);}
+    .btn-bulk:disabled{background:var(--canvas);color:var(--text-3);border-color:var(--border);cursor:not-allowed;font-weight:500;}
+    .btn-bulk-out{background:var(--s-amber-bg);color:var(--s-amber);border-color:var(--s-amber-border);}
+    .btn-bulk-del{background:var(--s-green);color:#fff;border-color:var(--s-green);}
 
-    /* ── HISTORY ── */
+    /* HISTORY */
     .section-label{font-size:10px;font-weight:600;color:var(--text-3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border-soft);}
     .history-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(26,31,46,0.04);}
     .hist-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--border);}
@@ -113,8 +115,6 @@
     .hist-no-photo{width:100%;height:100px;border-radius:7px;background:var(--canvas);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:11px;}
     .loading{text-align:center;color:var(--text-3);padding:40px 20px;font-size:13px;}
     .empty-state{text-align:center;color:var(--s-green);padding:40px 20px;font-size:13px;font-weight:500;}
-
-    /* ── LIGHTBOX ── */
     .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:500;align-items:center;justify-content:center;padding:20px;}
     .lightbox.open{display:flex;}
     .lightbox img{max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;}
@@ -167,46 +167,38 @@
 </div>
 
 <script>
-  /* ── CONFIG ── */
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzeZ8CLU50nn2MDA6EoU0ZKnu8qihZRU-LhAgsk9GVqa7TKA44J5fVx-lMu-oeFiGWqfA/exec";
-  const CLOUD = "dynjnftnu";
-  const PRESET = "lova_delivery";
+  const CLOUD   = "dynjnftnu";
+  const PRESET  = "lova_delivery";
 
-  /* ── i18n ── */
   const T = {
     en:{nav_tag:"Driver",logout:"Logout",active_dispatch:"Active dispatch",past_tab:"Past deliveries",
         past_label:"Past deliveries — last 7 days",delivering_to:"Delivering to",
-        total_for_truck:"Total for truck",order_breakdown:"Order breakdown",
-        out_for_delivery:"Out for delivery",set_delivered:"Set delivered",
-        select_all:"Select all",no_dispatch:"All clear — no active dispatch.",
-        prepping:"Prepping",on_the_way:"On the way",chef_confirmed:"Chef confirmed",
-        delivered:"Delivered",updating:"Updating…",
-        tap_camera:"Tap to open camera",loading_photo:"Photo before loading",
-        delivery_proof:"Proof of delivery",photo_saved:"Photo saved ✓",
-        uploading:"Uploading…",photo_failed:"Failed. Tap to retry.",
+        total_for_truck:"Total for truck",order_breakdown:"Order breakdown",select_all:"Select all",
+        no_dispatch:"All clear — no active dispatch.",prepping:"Prepping",on_the_way:"On the way",
+        chef_confirmed:"Chef confirmed",delivered:"Delivered",updating:"Updating…",
+        tap_camera:"Tap to open camera",hint_dispatch:"Photo before loading",hint_delivery:"Proof of delivery",
+        photo_saved:"✓ Photo saved",uploading:"Uploading…",photo_failed:"Failed — tap to retry",
         step1_label:"Loading photo",step2_label:"Delivery proof",
-        confirm_out:"Confirm: {n} order(s) — Out for delivery?",
-        confirm_del:"Confirm: {n} order(s) — Set delivered?",
-        no_orders:"No valid orders selected.",
+        btn_out:"Out for delivery",btn_del:"Set delivered",
+        btn_out_bulk:"Out for delivery (bulk)",btn_del_bulk:"Set delivered (bulk)",
         no_photo_dispatch:"Please take the loading photo first.",
-        no_photo_deliver:"Please take the delivery proof photo first."},
+        no_photo_deliver:"Please take the delivery proof photo first.",
+        no_orders:"No valid orders selected.",conn_err:"Connection error. Try again."},
     th:{nav_tag:"คนขับ",logout:"ออกจากระบบ",active_dispatch:"การจัดส่งที่ดำเนินการอยู่",
         past_tab:"ประวัติการจัดส่ง",past_label:"ประวัติการจัดส่ง — 7 วันที่ผ่านมา",
         delivering_to:"กำลังจัดส่งให้",total_for_truck:"ยอดรวมสำหรับรถ",
-        order_breakdown:"รายละเอียดออเดอร์",out_for_delivery:"ออกจัดส่งแล้ว",
-        set_delivered:"ยืนยันการจัดส่ง",select_all:"เลือกทั้งหมด",
-        no_dispatch:"ไม่มีการจัดส่งที่ดำเนินการอยู่",prepping:"กำลังเตรียม",
-        on_the_way:"กำลังจัดส่ง",chef_confirmed:"เชฟยืนยันแล้ว",delivered:"จัดส่งแล้ว",
-        updating:"กำลังอัพเดต…",tap_camera:"แตะเพื่อเปิดกล้อง",
-        loading_photo:"ถ่ายรูปก่อนโหลดสินค้า",delivery_proof:"หลักฐานการจัดส่ง",
-        photo_saved:"บันทึกรูปแล้ว ✓",uploading:"กำลังอัพโหลด…",
-        photo_failed:"ล้มเหลว แตะเพื่อลองใหม่",step1_label:"รูปก่อนโหลด",
-        step2_label:"หลักฐานจัดส่ง",
-        confirm_out:"ยืนยัน: {n} ออเดอร์ — ออกจัดส่งแล้ว?",
-        confirm_del:"ยืนยัน: {n} ออเดอร์ — ยืนยันการจัดส่ง?",
-        no_orders:"ไม่มีออเดอร์ที่เลือก",
+        order_breakdown:"รายละเอียดออเดอร์",select_all:"เลือกทั้งหมด",
+        no_dispatch:"ไม่มีการจัดส่งที่ดำเนินการอยู่",prepping:"กำลังเตรียม",on_the_way:"กำลังจัดส่ง",
+        chef_confirmed:"เชฟยืนยันแล้ว",delivered:"จัดส่งแล้ว",updating:"กำลังอัพเดต…",
+        tap_camera:"แตะเพื่อเปิดกล้อง",hint_dispatch:"ถ่ายรูปก่อนโหลดสินค้า",hint_delivery:"หลักฐานการจัดส่ง",
+        photo_saved:"✓ บันทึกรูปแล้ว",uploading:"กำลังอัพโหลด…",photo_failed:"ล้มเหลว — แตะเพื่อลองใหม่",
+        step1_label:"รูปก่อนโหลด",step2_label:"หลักฐานจัดส่ง",
+        btn_out:"ออกจัดส่งแล้ว",btn_del:"ยืนยันการจัดส่ง",
+        btn_out_bulk:"ออกจัดส่ง (ทั้งหมด)",btn_del_bulk:"ยืนยันจัดส่ง (ทั้งหมด)",
         no_photo_dispatch:"กรุณาถ่ายรูปก่อนโหลดสินค้า",
-        no_photo_deliver:"กรุณาถ่ายรูปหลักฐานการจัดส่ง"}
+        no_photo_deliver:"กรุณาถ่ายรูปหลักฐานการจัดส่ง",
+        no_orders:"ไม่มีออเดอร์ที่เลือก",conn_err:"ไม่สามารถเชื่อมต่อได้"}
   };
 
   let currentLang = sessionStorage.getItem("lova_lang") || "en";
@@ -216,436 +208,391 @@
   let driverName = "", manifestData = {}, selectedBranch = "";
   const photos = {};
 
-  function t(k, vars) {
-    let s = (T[currentLang][k] || T.en[k] || k);
-    if (vars) Object.keys(vars).forEach(v => s = s.replace("{"+v+"}", vars[v]));
-    return s;
-  }
+  function t(k){ return T[currentLang][k] || T.en[k] || k; }
 
-  function setLang(lang) {
-    currentLang = lang;
-    sessionStorage.setItem("lova_lang", lang);
-    document.getElementById("btnEN").classList.toggle("active", lang === "en");
-    document.getElementById("btnTH").classList.toggle("active", lang === "th");
-    document.getElementById("nav_tag").textContent = t("nav_tag");
-    document.getElementById("btn_logout").textContent = t("logout");
-    document.getElementById("tabManifest").textContent = t("active_dispatch");
-    document.getElementById("tabHistory").textContent = t("past_tab");
+  function setLang(lang){
+    currentLang = lang; sessionStorage.setItem("lova_lang", lang);
+    document.getElementById("btnEN").classList.toggle("active", lang==="en");
+    document.getElementById("btnTH").classList.toggle("active", lang==="th");
+    document.getElementById("nav_tag").textContent           = t("nav_tag");
+    document.getElementById("btn_logout").textContent        = t("logout");
+    document.getElementById("tabManifest").textContent       = t("active_dispatch");
+    document.getElementById("tabHistory").textContent        = t("past_tab");
     document.getElementById("txt_delivering_to").textContent = t("delivering_to");
-    document.getElementById("txt_past_label").textContent = t("past_label");
+    document.getElementById("txt_past_label").textContent    = t("past_label");
   }
 
-  /* ── GAS ── */
-  async function callGAS(action, params = {}) {
-    const res = await fetch(GAS_URL + "?callback=_", {
-      method: "POST",
-      body: JSON.stringify({ action, ...params }),
-      headers: { "Content-Type": "text/plain" }
-    });
+  async function callGAS(action, params={}){
+    const res = await fetch(GAS_URL+"?callback=_",{method:"POST",body:JSON.stringify({action,...params}),headers:{"Content-Type":"text/plain"}});
     const data = await res.json();
-    if (data.error) throw new Error(data.error);
+    if(data.error) throw new Error(data.error);
     return data.result;
   }
 
-  /* ── AUTH ── */
-  async function init() {
-    try {
-      driverName = await callGAS("verifyDriver", { pin });
+  async function init(){
+    try{
+      driverName = await callGAS("verifyDriver",{pin});
       document.getElementById("navUser").textContent = driverName;
-      setLang(currentLang);
-      fetchManifest();
-      fetchHistory();
-    } catch (err) {
-      alert("Session error: " + err.message);
-      window.location.href = "index.html";
-    }
+      setLang(currentLang); fetchManifest(); fetchHistory();
+    }catch(err){ alert("Session error: "+err.message); window.location.href="index.html"; }
   }
 
-  function logout() {
-    sessionStorage.clear();
-    window.location.href = "logout.html?src=driver";
+  function logout(){ sessionStorage.clear(); window.location.href="logout.html?src=driver"; }
+
+  function switchTab(tab){
+    document.getElementById("tabManifest").classList.toggle("active",tab==="manifest");
+    document.getElementById("tabHistory").classList.toggle("active",tab==="history");
+    document.getElementById("viewManifest").style.display = tab==="manifest"?"block":"none";
+    document.getElementById("viewHistory").style.display  = tab==="history" ?"block":"none";
   }
 
-  /* ── TABS ── */
-  function switchTab(tab) {
-    document.getElementById("tabManifest").classList.toggle("active", tab === "manifest");
-    document.getElementById("tabHistory").classList.toggle("active", tab === "history");
-    document.getElementById("viewManifest").style.display = tab === "manifest" ? "block" : "none";
-    document.getElementById("viewHistory").style.display = tab === "history" ? "block" : "none";
-  }
-
-  /* ── STATUS BADGE ── */
-  function getStatusInfo(status, lang) {
-    const map = {
-      "SENT":          { cls: "s-blue",  en: "Prepping",       th: "กำลังเตรียม" },
-      "ON THE WAY":    { cls: "s-amber", en: "On the way",     th: "กำลังจัดส่ง" },
-      "STAFF VERIFIED":{ cls: "s-teal",  en: "Chef confirmed", th: "เชฟยืนยันแล้ว" },
-      "DELIVERED":     { cls: "s-green", en: "Delivered",      th: "จัดส่งแล้ว" }
+  function getStatusInfo(status){
+    const map={
+      "SENT":          {cls:"s-blue",  label:t("prepping")},
+      "ON THE WAY":    {cls:"s-amber", label:t("on_the_way")},
+      "STAFF VERIFIED":{cls:"s-teal",  label:t("chef_confirmed")},
+      "DELIVERED":     {cls:"s-green", label:t("delivered")}
     };
-    const info = map[status] || { cls: "s-grey", en: status || "Pending", th: status || "รอดำเนินการ" };
-    return { cls: info.cls, label: lang === "th" ? info.th : info.en };
+    return map[status]||{cls:"s-grey",label:status||"Pending"};
   }
 
-  /* ── LIGHTBOX ── */
-  function openLightbox(url) {
-    document.getElementById("lightboxImg").src = url;
-    document.getElementById("lightbox").classList.add("open");
-  }
-  function closeLightbox() {
-    document.getElementById("lightbox").classList.remove("open");
-  }
+  function openLightbox(url){ document.getElementById("lightboxImg").src=url; document.getElementById("lightbox").classList.add("open"); }
+  function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
 
-  /* ── CLOUDINARY PHOTO UPLOAD ── */
-  function handlePhotoSelect(file, orderId, type) {
-    if (!file) return;
+  /* ── PHOTO PREVIEW + UPLOAD ── */
+  function handlePhotoSelect(file, orderId, type){
+    if(!file) return;
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function(e){
       const modal = document.createElement("div");
-      modal.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;";
+      modal.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;";
       const img = document.createElement("img");
       img.src = e.target.result;
-      img.style.cssText = "max-width:100%;max-height:60vh;border-radius:12px;object-fit:contain;margin-bottom:20px;";
+      img.style.cssText="max-width:100%;max-height:60vh;border-radius:12px;object-fit:contain;margin-bottom:20px;";
       const btnRow = document.createElement("div");
-      btnRow.style.cssText = "display:flex;gap:12px;width:100%;max-width:400px;";
+      btnRow.style.cssText="display:flex;gap:12px;width:100%;max-width:400px;";
       const useBtn = document.createElement("button");
-      useBtn.textContent = "Use this photo";
-      useBtn.style.cssText = "flex:1;height:50px;background:#1a1f2e;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;";
+      useBtn.textContent="Use this photo";
+      useBtn.style.cssText="flex:1;height:50px;background:#1a1f2e;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;";
       const retakeBtn = document.createElement("button");
-      retakeBtn.textContent = "Retake";
-      retakeBtn.style.cssText = "flex:1;height:50px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.3);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;";
-      btnRow.appendChild(retakeBtn);
-      btnRow.appendChild(useBtn);
-      modal.appendChild(img);
-      modal.appendChild(btnRow);
+      retakeBtn.textContent="Retake";
+      retakeBtn.style.cssText="flex:1;height:50px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.3);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Sarabun',sans-serif;";
+      btnRow.appendChild(retakeBtn); btnRow.appendChild(useBtn);
+      modal.appendChild(img); modal.appendChild(btnRow);
       document.body.appendChild(modal);
-      retakeBtn.onclick = () => document.body.removeChild(modal);
-      useBtn.onclick = () => { document.body.removeChild(modal); doUpload(file, orderId, type); };
+      retakeBtn.onclick = ()=> document.body.removeChild(modal);
+      useBtn.onclick    = ()=>{ document.body.removeChild(modal); doUpload(file,orderId,type); };
     };
     reader.readAsDataURL(file);
   }
 
-  function doUpload(file, orderId, type) {
-    const id = orderId + "-" + type;
-    const prog = document.getElementById("prog-" + id);
-    const progBar = document.getElementById("progbar-" + id);
-    const msg = document.getElementById("msg-" + id);
-    const thumb = document.getElementById("thumb-" + id);
-    const trigger = document.getElementById("trigger-" + id);
+  function doUpload(file, orderId, type){
+    const uid     = orderId+"-"+type;
+    const prog    = document.getElementById("prog-"+uid);
+    const progBar = document.getElementById("progbar-"+uid);
+    const msg     = document.getElementById("msg-"+uid);
+    const thumb   = document.getElementById("thumb-"+uid);
+    const trigger = document.getElementById("trigger-"+uid);
+    const actionBtn = document.getElementById("action-btn-"+orderId);
 
-    prog.style.display = "block";
-    msg.textContent = t("uploading");
-    msg.className = "photo-msg uploading";
+    prog.style.display="block";
+    msg.textContent=t("uploading"); msg.className="photo-msg uploading";
 
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("upload_preset", PRESET);
-    fd.append("folder", "lova/delivery");
-    fd.append("public_id", orderId + "_" + type);
+    const fd=new FormData();
+    fd.append("file",file); fd.append("upload_preset",PRESET);
+    fd.append("folder","lova/delivery"); fd.append("public_id",orderId+"_"+type);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.cloudinary.com/v1_1/" + CLOUD + "/image/upload");
-    xhr.upload.onprogress = function(e) {
-      if (e.lengthComputable) progBar.style.width = Math.round(e.loaded / e.total * 100) + "%";
+    const xhr=new XMLHttpRequest();
+    xhr.open("POST","https://api.cloudinary.com/v1_1/"+CLOUD+"/image/upload");
+    xhr.upload.onprogress=function(ev){
+      if(ev.lengthComputable) progBar.style.width=Math.round(ev.loaded/ev.total*100)+"%";
     };
-    xhr.onload = function() {
-      try {
-        const data = JSON.parse(xhr.responseText);
-        if (data.secure_url) {
-          if (!photos[orderId]) photos[orderId] = {};
-          photos[orderId][type] = data.secure_url;
-          thumb.src = data.secure_url;
-          thumb.style.display = "block";
+    xhr.onload=function(){
+      try{
+        const data=JSON.parse(xhr.responseText);
+        if(data.secure_url){
+          if(!photos[orderId]) photos[orderId]={};
+          photos[orderId][type]=data.secure_url;
+          thumb.src=data.secure_url; thumb.style.display="block";
           trigger.classList.add("has-photo");
-          prog.style.display = "none";
-          msg.textContent = t("photo_saved");
-          msg.className = "photo-msg ok";
-          /* unlock the matching action button */
-          if (type === "dispatch") {
-            const cb = document.getElementById("btn-out-confirm-" + orderId);
-            if (cb) cb.disabled = false;
-          } else {
-            const db = document.getElementById("btn-del-confirm-" + orderId);
-            if (db) db.disabled = false;
-          }
+          prog.style.display="none";
+          msg.textContent=t("photo_saved"); msg.className="photo-msg ok";
+          if(actionBtn) actionBtn.disabled=false;
         } else {
-          msg.textContent = t("photo_failed");
-          msg.className = "photo-msg err";
-          prog.style.display = "none";
+          msg.textContent=t("photo_failed"); msg.className="photo-msg err";
+          prog.style.display="none";
         }
-      } catch(e) {
-        msg.textContent = "Error.";
-        msg.className = "photo-msg err";
-      }
+      }catch(err){ msg.textContent="Error."; msg.className="photo-msg err"; }
     };
-    xhr.onerror = function() {
-      msg.textContent = "Connection error.";
-      msg.className = "photo-msg err";
-    };
+    xhr.onerror=function(){ msg.textContent=t("conn_err"); msg.className="photo-msg err"; };
     xhr.send(fd);
   }
 
-  function photoBlock(orderId, type, stepNum, hintKey) {
-    const id = orderId + "-" + type;
-    return `<div class="photo-step" id="photo-step-${stepNum}-${orderId}">
-      <div class="step-label"><span class="step-dot">${stepNum}</span>${t(stepNum===1?"step1_label":"step2_label")}</div>
-      <div class="photo-trigger" id="trigger-${id}">
-        <input type="file" accept="image/*" capture="environment" onchange="handlePhotoSelect(this.files[0],'${orderId}','${type}')">
+  function photoBlockHTML(orderId, type, stepNum, hintKey){
+    const uid=orderId+"-"+type;
+    return `
+      <div class="step-label">
+        <span class="step-dot">${stepNum}</span>
+        ${t(stepNum===1?"step1_label":"step2_label")}
+      </div>
+      <div class="photo-trigger" id="trigger-${uid}">
+        <input type="file" accept="image/*" capture="environment"
+               onchange="handlePhotoSelect(this.files[0],'${orderId}','${type}')">
         <div class="photo-trigger-text">${t("tap_camera")}</div>
         <div class="photo-trigger-hint">${t(hintKey)}</div>
-        <img class="photo-thumb" id="thumb-${id}" src="" alt="">
+        <img class="photo-thumb" id="thumb-${uid}" src="" alt="">
       </div>
-      <div class="photo-prog" id="prog-${id}"><div class="photo-prog-bar" id="progbar-${id}"></div></div>
-      <div class="photo-msg" id="msg-${id}"></div>
-    </div>`;
+      <div class="photo-prog" id="prog-${uid}">
+        <div class="photo-prog-bar" id="progbar-${uid}"></div>
+      </div>
+      <div class="photo-msg" id="msg-${uid}"></div>`;
   }
 
   /* ── MANIFEST ── */
-  async function fetchManifest() {
-    document.getElementById("manifestContent").innerHTML = `<div class="loading">Loading…</div>`;
-    try {
-      manifestData = await callGAS("getDriverManifest");
-      const branches = Object.keys(manifestData);
-      const card = document.getElementById("branchCard");
-      const sel = document.getElementById("branchSelector");
-      if (!branches.length) {
-        card.style.display = "none";
-        document.getElementById("manifestContent").innerHTML = `<div class="empty-state">${t("no_dispatch")}</div>`;
+  async function fetchManifest(){
+    document.getElementById("manifestContent").innerHTML=`<div class="loading">Loading…</div>`;
+    try{
+      manifestData=await callGAS("getDriverManifest");
+      const branches=Object.keys(manifestData);
+      const card=document.getElementById("branchCard");
+      const sel=document.getElementById("branchSelector");
+      if(!branches.length){
+        card.style.display="none";
+        document.getElementById("manifestContent").innerHTML=`<div class="empty-state">${t("no_dispatch")}</div>`;
         return;
       }
-      card.style.display = "block";
-      if (!selectedBranch || !branches.includes(selectedBranch)) selectedBranch = branches[0];
-      sel.innerHTML = branches.map(b => {
-        const u = Object.values(manifestData[b].totals).reduce((s, v) => s + v, 0);
-        return `<option value="${b}" ${b === selectedBranch ? "selected" : ""}>${b} (${u})</option>`;
+      card.style.display="block";
+      if(!selectedBranch||!branches.includes(selectedBranch)) selectedBranch=branches[0];
+      sel.innerHTML=branches.map(b=>{
+        const u=Object.values(manifestData[b].totals).reduce((s,v)=>s+v,0);
+        return `<option value="${b}" ${b===selectedBranch?"selected":""}>${b} (${u})</option>`;
       }).join("");
       renderSelectedBranch();
-    } catch(err) {
-      document.getElementById("manifestContent").innerHTML = `<div class="loading">Failed to load.</div>`;
+    }catch(err){
+      document.getElementById("manifestContent").innerHTML=`<div class="loading">Failed to load. Tap ↻ to retry.</div>`;
     }
   }
 
-  function renderSelectedBranch() {
-    selectedBranch = document.getElementById("branchSelector").value;
-    const branchData = manifestData[selectedBranch];
-    if (!branchData) return;
+  function renderSelectedBranch(){
+    selectedBranch=document.getElementById("branchSelector").value;
+    const bd=manifestData[selectedBranch]; if(!bd) return;
 
-    const safeCls = "chk-" + selectedBranch.replace(/[^a-zA-Z0-9]/g, "");
-    const totalUnits = Object.values(branchData.totals).reduce((s, v) => s + v, 0);
-    const uniqueItems = Object.keys(branchData.totals).length;
-    const totalOrders = Object.keys(branchData.orders).length;
+    const safeCls="chk-"+selectedBranch.replace(/[^a-zA-Z0-9]/g,"");
+    const totalUnits=Object.values(bd.totals).reduce((s,v)=>s+v,0);
+    const uniqueItems=Object.keys(bd.totals).length;
+    const totalOrders=Object.keys(bd.orders).length;
 
-    let hasSent = false, hasVerified = false;
-    for (const o in branchData.orders) {
-      if (branchData.orders[o].status === "SENT") hasSent = true;
-      if (branchData.orders[o].status === "STAFF VERIFIED") hasVerified = true;
+    let hasSent=false, hasVerified=false;
+    for(const oid in bd.orders){
+      if(bd.orders[oid].status==="SENT")          hasSent=true;
+      if(bd.orders[oid].status==="STAFF VERIFIED") hasVerified=true;
     }
 
-    let html = `
+    let html=`
       <div class="totals-card">
-        <div class="totals-head" onclick="toggleExpand('totals')">
+        <div class="totals-head" onclick="toggleSection('totals-body')">
           <div class="totals-head-left">
             <span class="totals-title">${t("total_for_truck")}</span>
             <span class="badge-sm">${uniqueItems} · ${totalUnits}</span>
           </div>
-          <span id="icon-totals" style="font-size:10px;color:var(--text-3);">▲</span>
+          <span id="icon-totals-body" style="font-size:10px;color:var(--text-3);">▲</span>
         </div>
-        <div id="body-totals" class="totals-body">
-          ${Object.entries(branchData.totals).map(([item, qty]) =>
-            `<div class="total-row"><span>${item}</span><strong>${qty}</strong></div>`
-          ).join("")}
+        <div id="totals-body" class="totals-body">
+          ${Object.entries(bd.totals).map(([item,qty])=>`<div class="total-row"><span>${item}</span><strong>${qty}</strong></div>`).join("")}
         </div>
       </div>
       <div class="totals-card">
-        <div class="breakdown-head" onclick="toggleExpand('breakdown')">
+        <div class="breakdown-head" onclick="toggleSection('breakdown-body')">
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="breakdown-title">${t("order_breakdown")}</span>
             <span class="badge-sm">${totalOrders}</span>
-            <span id="icon-breakdown" style="font-size:10px;color:var(--text-3);">▲</span>
+            <span id="icon-breakdown-body" style="font-size:10px;color:var(--text-3);">▲</span>
           </div>
           <label class="select-all-label" onclick="event.stopPropagation()">
-            <input type="checkbox" onclick="toggleSelectAll('${safeCls}',this)" checked> ${t("select_all")}
+            <input type="checkbox" onclick="toggleSelectAll('${safeCls}',this)" checked>
+            ${t("select_all")}
           </label>
         </div>
-        <div id="body-breakdown" style="padding:12px 12px 0;">`;
+        <div id="breakdown-body" style="padding:12px 12px 0;">`;
 
-    for (const orderId in branchData.orders) {
-      const order = branchData.orders[orderId];
-      const isOnWay = order.status === "ON THE WAY";
-      const { cls, label } = getStatusInfo(order.status, currentLang);
+    for(const orderId in bd.orders){
+      const order=bd.orders[orderId];
+      const status=order.status;
+      const {cls,label}=getStatusInfo(status);
 
-      /* Per-order photo blocks and individual confirm buttons */
-      const needsDispatchPhoto = order.status === "SENT";
-      const needsDeliveryPhoto = order.status === "STAFF VERIFIED";
+      /*
+        SENT           → dispatch photo required → unlocks "Out for delivery"
+        ON THE WAY     → delivery photo required → unlocks "Set delivered"
+        STAFF VERIFIED → delivery photo required → unlocks "Set delivered"
+        anything else  → no photo, no per-order button
+      */
+      const needsDispatch = (status==="SENT");
+      const needsDelivery = (status==="ON THE WAY"||status==="STAFF VERIFIED");
+      const isOnWay       = (status==="ON THE WAY");
 
-      const dispatchPhotoHtml = needsDispatchPhoto
-        ? photoBlock(orderId, "dispatch", 1, "loading_photo")
-        : "";
-      const deliveryPhotoHtml = needsDeliveryPhoto
-        ? photoBlock(orderId, "complete", 2, "delivery_proof")
-        : "";
+      let photoHTML="", actionHTML="";
 
-      const perOrderBtns = needsDispatchPhoto
-        ? `<button id="btn-out-confirm-${orderId}" class="btn-action btn-out-delivery" style="margin-top:10px;height:44px;font-size:11px;" disabled onclick="submitSingleUpdate('${orderId}','ON THE WAY','${safeCls}')">${t("out_for_delivery")}</button>`
-        : needsDeliveryPhoto
-        ? `<button id="btn-del-confirm-${orderId}" class="btn-action btn-set-delivered" style="margin-top:10px;height:44px;font-size:11px;" disabled onclick="submitSingleUpdate('${orderId}','DELIVERED','${safeCls}')">${t("set_delivered")}</button>`
-        : "";
-
-      html += `<div class="order-box" style="${isOnWay ? "opacity:0.65" : ""}">
-        <div class="order-box-top">
-          <input type="checkbox" class="${safeCls} order-checkbox" value="${orderId}" data-status="${order.status}" ${isOnWay ? "disabled" : "checked"}>
-          <div class="order-box-info" onclick="toggleOrderExpand('${orderId}')">
-            <div class="order-id"><span>${orderId}</span><span class="expand-icon" id="icon-ord-${orderId}">▼</span></div>
-            <div class="status-badge ${cls}">${label}</div>
-          </div>
-        </div>
-        <div class="order-items-expand" id="exp-${orderId}">
-          ${order.items.map(i => `<div class="order-sub-item"><span>${i.name}</span><strong>${i.qty}</strong></div>`).join("")}
-        </div>
-        ${dispatchPhotoHtml}
-        ${deliveryPhotoHtml}
-        ${perOrderBtns}
-      </div>`;
-    }
-
-    html += `</div>
-        <div class="btn-row" style="padding:0 12px 14px;">
-          <button class="btn-action btn-out-delivery" id="btn-out-${safeCls}" ${hasSent ? "" : "disabled"} onclick="submitBulkUpdate('${safeCls}','ON THE WAY')">${t("out_for_delivery")} (bulk)</button>
-          <button class="btn-action btn-set-delivered" id="btn-del-${safeCls}" ${hasVerified ? "" : "disabled"} onclick="submitBulkUpdate('${safeCls}','DELIVERED')">${t("set_delivered")} (bulk)</button>
-        </div>
-      </div>`;
-
-    document.getElementById("manifestContent").innerHTML = html;
-
-    /* re-show photo steps for orders already on the way */
-    for (const orderId in branchData.orders) {
-      if (branchData.orders[orderId].status === "STAFF VERIFIED") {
-        const s2 = document.getElementById("photo-step-2-" + orderId);
-        if (s2) s2.classList.add("show");
+      if(needsDispatch){
+        photoHTML=`<div class="photo-section">${photoBlockHTML(orderId,"dispatch",1,"hint_dispatch")}</div>`;
+        actionHTML=`<button id="action-btn-${orderId}" class="order-action-btn btn-out-delivery" disabled
+          onclick="submitSingleUpdate('${orderId}','ON THE WAY','dispatch')">${t("btn_out")}</button>`;
+      } else if(needsDelivery){
+        photoHTML=`<div class="photo-section">${photoBlockHTML(orderId,"complete",2,"hint_delivery")}</div>`;
+        actionHTML=`<button id="action-btn-${orderId}" class="order-action-btn btn-set-delivered" disabled
+          onclick="submitSingleUpdate('${orderId}','DELIVERED','complete')">${t("btn_del")}</button>`;
       }
+
+      html+=`
+        <div class="order-box" style="${isOnWay?"opacity:0.7":""}">
+          <div class="order-box-top">
+            <input type="checkbox" class="${safeCls} order-checkbox"
+              value="${orderId}" data-status="${status}"
+              ${isOnWay?"disabled":"checked"}>
+            <div class="order-box-info" onclick="toggleOrderItems('${orderId}')">
+              <div class="order-id-row">
+                <span>${orderId}</span>
+                <span class="expand-icon" id="icon-${orderId}">▼</span>
+              </div>
+              <div class="status-badge ${cls}">${label}</div>
+            </div>
+          </div>
+          <div class="order-items-expand" id="items-${orderId}">
+            ${order.items.map(i=>`<div class="order-sub-item"><span>${i.name}</span><strong>${i.qty}</strong></div>`).join("")}
+          </div>
+          ${photoHTML}
+          ${actionHTML}
+        </div>`;
     }
+
+    html+=`</div>
+        <div class="btn-row">
+          <button class="btn-bulk btn-bulk-out" id="bulk-out-${safeCls}"
+            ${hasSent?"":"disabled"}
+            onclick="submitBulkUpdate('${safeCls}','ON THE WAY')">${t("btn_out_bulk")}</button>
+          <button class="btn-bulk btn-bulk-del" id="bulk-del-${safeCls}"
+            ${hasVerified?"":"disabled"}
+            onclick="submitBulkUpdate('${safeCls}','DELIVERED')">${t("btn_del_bulk")}</button>
+        </div>
+      </div>`;
+
+    document.getElementById("manifestContent").innerHTML=html;
   }
 
-  function toggleExpand(section) {
-    const body = document.getElementById("body-" + section);
-    const icon = document.getElementById("icon-" + section);
-    if (!body) return;
-    const open = body.style.display !== "none";
-    body.style.display = open ? "none" : "block";
-    if (icon) icon.textContent = open ? "▼" : "▲";
-  }
-  function toggleOrderExpand(orderId) {
-    const exp = document.getElementById("exp-" + orderId);
-    const icon = document.getElementById("icon-ord-" + orderId);
-    if (!exp) return;
-    const open = exp.style.display === "block";
-    exp.style.display = open ? "none" : "block";
-    if (icon) icon.textContent = open ? "▼" : "▲";
-  }
-  function toggleSelectAll(cls, box) {
-    document.querySelectorAll("." + cls).forEach(c => { if (!c.disabled) c.checked = box.checked; });
+  function toggleSection(id){
+    const el=document.getElementById(id), icon=document.getElementById("icon-"+id);
+    if(!el) return;
+    const open=el.style.display!=="none";
+    el.style.display=open?"none":"block";
+    if(icon) icon.textContent=open?"▼":"▲";
   }
 
-  /* single order with photo confirm */
-  async function submitSingleUpdate(orderId, newStatus, safeCls) {
-    const photoType = newStatus === "ON THE WAY" ? "dispatch" : "complete";
-    const p = photos[orderId] || {};
-    if (!p[photoType]) {
-      alert(t(newStatus === "ON THE WAY" ? "no_photo_dispatch" : "no_photo_deliver"));
-      return;
+  function toggleOrderItems(orderId){
+    const el=document.getElementById("items-"+orderId), icon=document.getElementById("icon-"+orderId);
+    if(!el) return;
+    const open=el.style.display==="block";
+    el.style.display=open?"none":"block";
+    if(icon) icon.textContent=open?"▼":"▲";
+  }
+
+  function toggleSelectAll(cls,box){
+    document.querySelectorAll("."+cls).forEach(c=>{ if(!c.disabled) c.checked=box.checked; });
+  }
+
+  /* ── SINGLE UPDATE (photo required) ── */
+  async function submitSingleUpdate(orderId, newStatus, photoType){
+    const p=photos[orderId]||{};
+    if(!p[photoType]){
+      alert(t(newStatus==="ON THE WAY"?"no_photo_dispatch":"no_photo_deliver")); return;
     }
-    const btnId = newStatus === "ON THE WAY"
-      ? "btn-out-confirm-" + orderId
-      : "btn-del-confirm-" + orderId;
-    const btn = document.getElementById(btnId);
-    if (btn) { btn.textContent = t("updating"); btn.disabled = true; }
-    try {
-      await callGAS("updateDriverStatus", {
-        orderIds: [orderId],
-        newStatus,
-        driverName,
-        dispatchPhotoUrl: p.dispatch || null,
-        deliveryPhotoUrl: p.complete || null
+    const btn=document.getElementById("action-btn-"+orderId);
+    if(btn){ btn.textContent=t("updating"); btn.disabled=true; }
+    try{
+      await callGAS("updateDriverStatus",{
+        orderIds:[orderId], newStatus, driverName,
+        dispatchPhotoUrl: p.dispatch||null,
+        deliveryPhotoUrl: p.complete||null
       });
-      fetchManifest();
-      fetchHistory();
-    } catch(err) {
-      alert("Error: " + err.message);
-      if (btn) { btn.textContent = newStatus === "ON THE WAY" ? t("out_for_delivery") : t("set_delivered"); btn.disabled = false; }
+      fetchManifest(); fetchHistory();
+    }catch(err){
+      alert("Error: "+err.message);
+      if(btn){ btn.textContent=newStatus==="ON THE WAY"?t("btn_out"):t("btn_del"); btn.disabled=false; }
     }
   }
 
-  /* bulk update (no photo required) */
-  async function submitBulkUpdate(safeCls, newStatus) {
-    const checkboxes = document.querySelectorAll("." + safeCls);
-    const selectedIds = [];
-    checkboxes.forEach(c => {
-      if (!c.checked) return;
-      if (newStatus === "ON THE WAY" && c.dataset.status !== "SENT") return;
-      if (newStatus === "DELIVERED" && c.dataset.status !== "STAFF VERIFIED") return;
+  /* ── BULK UPDATE (no photo) ── */
+  async function submitBulkUpdate(safeCls, newStatus){
+    const checkboxes=document.querySelectorAll("."+safeCls);
+    const selectedIds=[];
+    checkboxes.forEach(c=>{
+      if(!c.checked) return;
+      if(newStatus==="ON THE WAY"  && c.dataset.status!=="SENT")           return;
+      if(newStatus==="DELIVERED"   && c.dataset.status!=="STAFF VERIFIED") return;
       selectedIds.push(c.value);
     });
-    if (!selectedIds.length) { alert(t("no_orders")); return; }
-    const confirmMsg = t(newStatus === "ON THE WAY" ? "confirm_out" : "confirm_del", { n: selectedIds.length });
-    if (!confirm(confirmMsg)) return;
-    const btnOut = document.getElementById("btn-out-" + safeCls);
-    const btnDel = document.getElementById("btn-del-" + safeCls);
-    if (btnOut) { btnOut.textContent = t("updating"); btnOut.disabled = true; }
-    if (btnDel) { btnDel.textContent = t("updating"); btnDel.disabled = true; }
-    try {
-      await callGAS("updateDriverStatus", { orderIds: selectedIds, newStatus, driverName });
-      fetchManifest();
-      fetchHistory();
-    } catch(err) {
-      alert("Error: " + err.message);
-      if (btnOut) { btnOut.textContent = t("out_for_delivery"); btnOut.disabled = false; }
-      if (btnDel) { btnDel.textContent = t("set_delivered"); btnDel.disabled = false; }
+    if(!selectedIds.length){ alert(t("no_orders")); return; }
+    const msg=currentLang==="th"
+      ?`ยืนยัน: ${selectedIds.length} ออเดอร์?`
+      :`Confirm: ${selectedIds.length} order(s) — ${newStatus==="ON THE WAY"?t("btn_out"):t("btn_del")}?`;
+    if(!confirm(msg)) return;
+    const btnOut=document.getElementById("bulk-out-"+safeCls);
+    const btnDel=document.getElementById("bulk-del-"+safeCls);
+    if(btnOut){ btnOut.textContent=t("updating"); btnOut.disabled=true; }
+    if(btnDel){ btnDel.textContent=t("updating"); btnDel.disabled=true; }
+    try{
+      await callGAS("updateDriverStatus",{orderIds:selectedIds,newStatus,driverName});
+      fetchManifest(); fetchHistory();
+    }catch(err){
+      alert("Error: "+err.message);
+      if(btnOut){ btnOut.textContent=t("btn_out_bulk"); btnOut.disabled=false; }
+      if(btnDel){ btnDel.textContent=t("btn_del_bulk"); btnDel.disabled=false; }
     }
   }
 
   /* ── HISTORY ── */
-  async function fetchHistory() {
-    try {
-      renderHistory(await callGAS("getDriverHistory", { driverName }));
-    } catch {
-      document.getElementById("historyContent").innerHTML = `<div class="loading">Failed.</div>`;
-    }
+  async function fetchHistory(){
+    try{ renderHistory(await callGAS("getDriverHistory",{driverName})); }
+    catch{ document.getElementById("historyContent").innerHTML=`<div class="loading">Failed.</div>`; }
   }
 
-  function renderHistory(data) {
-    const container = document.getElementById("historyContent");
-    if (!data.length) {
-      container.innerHTML = `<div class="loading">${currentLang === "th" ? "ไม่พบประวัติการจัดส่ง" : "No past deliveries found."}</div>`;
+  function renderHistory(data){
+    const container=document.getElementById("historyContent");
+    if(!data.length){
+      container.innerHTML=`<div class="loading">${currentLang==="th"?"ไม่พบประวัติการจัดส่ง":"No past deliveries found."}</div>`;
       return;
     }
-    const grouped = {};
-    data.forEach(item => {
-      if (!grouped[item.id]) grouped[item.id] = { time: item.time, branch: item.branch, status: item.status, items: [], dispatch_photo: item.dispatch_photo || null, delivery_photo: item.delivery_photo || null };
+    const grouped={};
+    data.forEach(item=>{
+      if(!grouped[item.id]) grouped[item.id]={
+        time:item.time,branch:item.branch,status:item.status,items:[],
+        dispatch_photo:item.dispatch_photo||null,delivery_photo:item.delivery_photo||null
+      };
       grouped[item.id].items.push(item);
     });
-    const { cls: hCls, label: hLabel } = getStatusInfo("DELIVERED", currentLang);
-    container.innerHTML = Object.entries(grouped).map(([oId, order]) => {
-      const dp = order.dispatch_photo
-        ? `<img class="hist-photo" src="${order.dispatch_photo}" onclick="openLightbox('${order.dispatch_photo}')" alt="Loading">`
-        : `<div class="hist-no-photo">No photo</div>`;
-      const dv = order.delivery_photo
-        ? `<img class="hist-photo" src="${order.delivery_photo}" onclick="openLightbox('${order.delivery_photo}')" alt="Delivery">`
-        : `<div class="hist-no-photo">No photo</div>`;
-      const photosHtml = (order.dispatch_photo || order.delivery_photo) ? `
+    const {cls:hCls,label:hLabel}=getStatusInfo("DELIVERED");
+    container.innerHTML=Object.entries(grouped).map(([oId,order])=>{
+      const dp=order.dispatch_photo
+        ?`<img class="hist-photo" src="${order.dispatch_photo}" onclick="openLightbox('${order.dispatch_photo}')" alt="Loading">`
+        :`<div class="hist-no-photo">No photo</div>`;
+      const dv=order.delivery_photo
+        ?`<img class="hist-photo" src="${order.delivery_photo}" onclick="openLightbox('${order.delivery_photo}')" alt="Delivery">`
+        :`<div class="hist-no-photo">No photo</div>`;
+      const photosHTML=(order.dispatch_photo||order.delivery_photo)?`
         <div class="hist-photos">
           <div><div class="hist-photo-label">${t("step1_label")}</div>${dp}</div>
           <div><div class="hist-photo-label">${t("step2_label")}</div>${dv}</div>
-        </div>` : "";
-      return `<div class="history-card">
-        <div class="hist-top">
-          <div><div class="hist-id">${oId}</div><div class="hist-branch">${order.branch}</div></div>
-          <div style="text-align:right">
-            <div class="status-badge ${hCls}" style="margin-top:0;">${hLabel}</div>
-            <div class="hist-time" style="margin-top:4px;">${order.time}</div>
+        </div>`:"";
+      return `
+        <div class="history-card">
+          <div class="hist-top">
+            <div><div class="hist-id">${oId}</div><div class="hist-branch">${order.branch}</div></div>
+            <div style="text-align:right">
+              <div class="status-badge ${hCls}" style="margin-top:0;">${hLabel}</div>
+              <div class="hist-time" style="margin-top:4px;">${order.time}</div>
+            </div>
           </div>
-        </div>
-        ${order.items.map(sub => `<div class="hist-item"><span>${sub.item}</span><strong>×${sub.qty}</strong></div>`).join("")}
-        ${photosHtml}
-      </div>`;
+          ${order.items.map(sub=>`<div class="hist-item"><span>${sub.item}</span><strong>×${sub.qty}</strong></div>`).join("")}
+          ${photosHTML}
+        </div>`;
     }).join("");
   }
 
